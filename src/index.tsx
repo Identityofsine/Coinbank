@@ -30,6 +30,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { HomeScreen } from './screens/Home';
 import { defaultScreenOptions } from './screens/Screen';
 import NavigationBar from './components/NavigationBar';
+import LoginScreen from './screens/Login';
 
 type SectionProps = PropsWithChildren<{
 	title: string;
@@ -40,19 +41,21 @@ export const Stack = createNativeStackNavigator();
 function App(): React.JSX.Element {
 
 	return (
-		<SafeAreaView style={AppStyles.safeViewContainer}>
-			<NavigationBar />
-			<NavigationContainer
-			>
-				<Stack.Navigator>
-					<Stack.Screen
-						name="Home"
-						component={HomeScreen}
-						options={defaultScreenOptions}
-					/>
-				</Stack.Navigator>
-			</NavigationContainer>
-		</SafeAreaView>
+		<NavigationContainer
+		>
+			<Stack.Navigator>
+				<Stack.Screen
+					name="Login"
+					component={LoginScreen}
+					options={defaultScreenOptions}
+				/>
+				<Stack.Screen
+					name="Home"
+					component={HomeScreen}
+					options={defaultScreenOptions}
+				/>
+			</Stack.Navigator>
+		</NavigationContainer>
 	);
 }
 

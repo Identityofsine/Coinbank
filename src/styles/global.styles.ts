@@ -3,6 +3,7 @@ import { ImageStyle, StyleSheet, TextStyle, ViewStyle } from "react-native";
 const AppColors = {
 	'background-color': '#020202',
 	'primary-color': '#ffffff',
+	'primary-complement': '#878787',
 }
 
 
@@ -13,10 +14,30 @@ const AppStyles = StyleSheet.create({
 		flex: 1,
 	},
 	viewContainer: {
-		marginTop: 14,
+		marginTop: 51,
 		paddingLeft: 25,
 		paddingRight: 25,
 		backgroundColor: AppColors["background-color"]
+	},
+	input: {
+		backgroundColor: AppColors["primary-color"],
+		color: AppColors["background-color"],
+		borderWidth: 1,
+		borderColor: AppColors["primary-complement"],
+		borderRadius: 6,
+		paddingLeft: 12,
+		paddingRight: 12,
+		paddingTop: 10,
+		paddingBottom: 10,
+		fontSize: 18
+	},
+	'button-1': {
+		backgroundColor: AppColors["primary-color"],
+		borderRadius: 26,
+		paddingLeft: 22.5,
+		paddingRight: 20,
+		paddingTop: 10,
+		paddingBottom: 10,
 	},
 	text: {
 		color: AppColors["primary-color"]
@@ -45,19 +66,22 @@ const DryStyles: DryStyle = {
 		justifyContent: 'center',
 		alignItems: 'center'
 	},
-	'flex-space-between': {
+	'justify-center': {
+		justifyContent: 'center'
+	},
+	'space-between': {
 		justifyContent: 'space-between'
 	},
-	'flex-space-around': {
+	'space-around': {
 		justifyContent: 'space-around'
 	},
-	'flex-space-evenly': {
+	'space-evenly': {
 		justifyContent: 'space-evenly'
 	},
-	'flex-start': {
+	'justify-start': {
 		justifyContent: 'flex-start'
 	},
-	'flex-end': {
+	'justify-flex-end': {
 		justifyContent: 'flex-end'
 	},
 	'align-center': {
@@ -71,7 +95,39 @@ const DryStyles: DryStyle = {
 	},
 	'flex-grow': {
 		flexGrow: 1
+	},
+	//text
+	'h1': {
+		fontSize: 72,
+		fontWeight: 500
+	},
+	'h1-sub': {
+		fontSize: 18,
+		fontWeight: 300,
+		color: AppColors["primary-complement"],
+	},
+	'h2': {
+		fontSize: 46,
+		fontWeight: 500
+	},
+	'h2-sub': {
+		fontSize: 14,
+		fontWeight: 300,
+		color: AppColors["primary-complement"],
+	},
+	'button-1-text': {
+		fontSize: 15,
+		fontWeight: 500,
+	},
+	'button-2-text': {
+		fontSize: 20,
+		fontWeight: 500,
+	},
+	//dimensions
+	'full-height': {
+		minHeight: '100%'
 	}
 }
+
 
 export { AppStyles, AppColors, DryStyles };

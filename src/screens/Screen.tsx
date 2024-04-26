@@ -1,21 +1,26 @@
 import React from "react";
-import { SafeAreaView, View } from "react-native";
+import { SafeAreaView, ScrollView, View } from "react-native";
 import { AppStyles } from "../styles/global.styles";
+import NavigationBar from "../components/NavigationBar";
 
 type ScreenProps = {
+	navBar?: boolean;
 	children: React.ReactNode | React.ReactNode[] | null;
 };
 
-export function AsScreen({ children }: ScreenProps) {
+export function AsScreen({ navBar = true, children }: ScreenProps) {
 	return (
 		<SafeAreaView
 			style={{ ...AppStyles.safeViewContainer }}
 		>
-			<View
-				style={{ ...AppStyles.viewContainer }}
-			>
-				{children}
-			</View>
+			<ScrollView>
+				{navBar && <NavigationBar />}
+				<View
+					style={{ ...AppStyles.viewContainer }}
+				>
+					{children}
+				</View>
+			</ScrollView>
 		</SafeAreaView>
 	);
 }
