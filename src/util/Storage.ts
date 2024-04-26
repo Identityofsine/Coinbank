@@ -1,11 +1,11 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-namespace Storage {
-	export async function save(key: string, value: string | object) {
+export namespace Storage {
+	export async function save(key: string, value: string | number | object) {
 		try {
 			if (typeof value === 'object')
 				value = JSON.stringify(value);
-			await AsyncStorage.setItem(key, value);
+			await AsyncStorage.setItem(key, `${value}`);
 		} catch (error) {
 			console.error("[Storage::save] Error saving data into storage (%s)", error)
 		}
