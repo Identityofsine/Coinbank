@@ -28,6 +28,10 @@ type DryStyle = {
 }
 
 const DryStyles: DryStyle = {
+	'screen-padding': {
+		paddingLeft: 25,
+		paddingRight: 25
+	},
 	'flex': {
 		flex: 1
 	},
