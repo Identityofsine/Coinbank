@@ -28,7 +28,7 @@ import { AppStyles } from './styles/global.styles';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { HomeScreen } from './screens/Home';
-import Screem, { defaultScreenOptions } from './screens/Screen';
+import { defaultScreenOptions } from './screens/Screen';
 
 type SectionProps = PropsWithChildren<{
 	title: string;

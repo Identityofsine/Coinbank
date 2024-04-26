@@ -70,4 +70,4 @@ const DryStyles: DryStyle = {
 	}
 }
 
-export { AppStyles, AppColors };
+export { AppStyles, AppColors, DryStyles };
