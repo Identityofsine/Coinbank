@@ -25,6 +25,10 @@ import {
 	ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 import { AppStyles } from './styles/global.styles';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { HomeScreen } from './screens/Home';
+import Screem, { defaultScreenOptions } from './screens/Screen';
 
 type SectionProps = PropsWithChildren<{
 	title: string;
@@ -56,23 +60,21 @@ function Section({ children, title }: SectionProps): React.JSX.Element {
 	);
 }
 
+export const Stack = createNativeStackNavigator();
+
 function App(): React.JSX.Element {
 
 	return (
-		<SafeAreaView style={{
-			...AppStyles.sectionContainer
-		}}>
-			<StatusBar
-				barStyle={'dark-content'}
-				backgroundColor={'#000000'}
-			/>
-			<View>
-				<Text>
-					Hello World
-				</Text>
-			</View>
-
-		</SafeAreaView >
+		<NavigationContainer
+		>
+			<Stack.Navigator>
+				<Stack.Screen
+					name="Home"
+					component={HomeScreen}
+					options={defaultScreenOptions}
+				/>
+			</Stack.Navigator>
+		</NavigationContainer>
 	);
 }
 
