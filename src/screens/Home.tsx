@@ -1,14 +1,17 @@
-import { Animated, Text, View } from "react-native";
-import { AsScreen } from "./Screen";
-import { AppStyles, DryStyles } from "../styles/global.styles";
+import { Animated, RefreshControl, Text, View } from "react-native";
+import { AsScreen, CoinbankContext } from "./Screen";
+import { AppColors, AppStyles, DryStyles } from "../styles/global.styles";
 import Gradient from "../components/Gradient";
 import Deposit from "../../assets/icons/button01.svg"
 import Withdraw from "../../assets/icons/button02.svg"
 import Audit from "../../assets/icons/button03.svg"
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { API } from "../api/request";
 import { getCoinbanks } from "../api/getCoinbanks";
 import { sleep } from "../util/sleep";
+import { getContributions } from "../api/getContributions";
+import { Storage } from "../util/Storage";
+import { useCallback } from "react";
 
 type HomeButtonProps = {
 	icon: 'deposit' | 'withdraw' | 'audit'
@@ -34,8 +37,13 @@ export function HomeScreen() {
 
 	const [isPending, setPending] = useState<boolean>(false);
 	const [coinbanks, setCoinbanks] = useState<API.Coinbank[] | undefined>(undefined);
+	const AppContext = useContext(CoinbankContext);
 
 	useEffect(() => {
+		onRefresh();
+	}, []);
+
+	const onRefresh = useCallback(() => {
 		setPending(true);
 		sleep(2000).then(() => {
 			getCoinbanks().then((response) => {
@@ -45,17 +53,28 @@ export function HomeScreen() {
 			})
 				.finally(() => setPending(false));
 		});
-	}, []);
+	}, [])
 
 	useEffect(() => {
-		if (coinbanks)
-			console.log(coinbanks);
+		if (!coinbanks) return;
+		if (!AppContext) return;
+		AppContext.setData('coinbanks', coinbanks);
 	}, [coinbanks]);
 
 
 
 	return (
-		<AsScreen>
+		<AsScreen
+			refreshControl={
+				<RefreshControl
+					refreshing={false}
+					onRefresh={onRefresh}
+					colors={[AppColors['primary-color']]}
+					tintColor={AppColors['primary-color']}
+					title='Refreshing...'
+				/>
+			}
+		>
 			{/* Flex Container at top */}
 			{isPending && <HomeScreenSkeleton />}
 			{!isPending && coinbanks && <HomeScreenComponents {...coinbanks?.[0]} />}
@@ -63,7 +82,7 @@ export function HomeScreen() {
 	);
 }
 
-function HomeScreenSkeleton() {
+function HomeScreenSkeleton({ height = 325 }: { height?: number }) {
 	const shimmerAnim = useRef(new Animated.Value(0)).current;
 
 	useEffect(() => {
@@ -91,7 +110,7 @@ function HomeScreenSkeleton() {
 
 	return (
 		<>
-			<Animated.View style={{ height: 325, minWidth: 100, backgroundColor: '#353535', opacity: shimmerAnim }}>
+			<Animated.View style={{ height: height, minWidth: 100, backgroundColor: '#353535', opacity: shimmerAnim }}>
 
 			</Animated.View>
 		</>
@@ -103,6 +122,24 @@ type HomeScreenComponentsProps = {
 } & API.Coinbank
 
 function HomeScreenComponents({ name, value, ...props }: HomeScreenComponentsProps) {
+
+	const [contributions, setContributions] = useState<API.Contribution[]>([]);
+	const AppContext = useContext(CoinbankContext);
+
+	useEffect(() => {
+		if (!AppContext) return;
+		sleep(1000).then(() => {
+			Storage.load('user_id').then((id) => {
+				if (!id) return;
+				getContributions(props.coinbank_id.toString())
+					.then((response: API.GetContributionsResponse | undefined) => {
+						if (response) {
+							setContributions(response.contributions);
+						}
+					});
+			});
+		});
+	}, [])
 
 	if (!value) value = 0;
 
@@ -143,17 +180,25 @@ function HomeScreenComponents({ name, value, ...props }: HomeScreenComponentsPro
 						</Text>
 					</Gradient.Mask>
 				</View>
-				<Contributions name='Black' value={value} />
-				<View>
-					<Text
-						style={{ ...AppStyles.text, ...DryStyles['h2-sub'] }}>
-						You Saved
-					</Text>
-					<Text
-						style={{ ...AppStyles.text, ...DryStyles['h2'] }}>
-						$100.12
-					</Text>
-				</View>
+
+				{contributions.length === 0 && <HomeScreenSkeleton height={135} />}
+
+				{contributions.length > 0 &&
+					contributions.map((contribution, index) => (
+						contribution.user_id === Number(AppContext.data?.user_id) ?
+							<Contributions
+								key={index}
+								name='You'
+								value={contribution.total}
+							/>
+							:
+							<Contributions
+								key={index}
+								name={contribution.name}
+								value={contribution.total}
+							/>
+					))
+				}
 			</View>
 			<Gradient style={{ height: 3, borderRadius: 12, marginTop: 18, marginBottom: 18 }} />
 			<View style={{ gap: 48, ...DryStyles['flex-row'], ...DryStyles['justify-center'] }}>

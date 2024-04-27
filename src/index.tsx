@@ -5,7 +5,7 @@
  * @format
  */
 
-import React, { useEffect } from 'react';
+import React, { createContext, useEffect } from 'react';
 import type { PropsWithChildren } from 'react';
 import {
 	SafeAreaView,
@@ -33,31 +33,21 @@ import NavigationBar from './components/NavigationBar';
 import LoginScreen from './screens/Login';
 import { refresh } from './api/refresh';
 import { Storage } from './util/Storage';
+import { API } from './api/request';
 
 type SectionProps = PropsWithChildren<{
 	title: string;
 }>;
 
+
 export const Stack = createNativeStackNavigator();
+
+
 
 function App(): React.JSX.Element {
 
 	const navigation = createNavigationContainerRef();
 
-	useEffect(() => {
-		refresh((result: boolean) => {
-			if (result) {
-				//@ts-ignore
-				navigation.navigate('Home');
-			} else {
-				Storage.clear('user_id');
-				Storage.clear('active_token');
-				Storage.clear('refresh_token');
-				//@ts-ignore
-				navigation.navigate('Login');
-			}
-		})
-	})
 
 	return (
 		<NavigationContainer

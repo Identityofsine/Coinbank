@@ -2,6 +2,7 @@ import LinearGradient, { LinearGradientProps } from "react-native-linear-gradien
 import { StyleSheet, Text } from "react-native"
 import MaskedView from "@react-native-masked-view/masked-view"
 import React from "react"
+import { AppColors } from "../styles/global.styles"
 
 type GradientType = 'gradient-1' | 'gradient-2'
 
@@ -25,11 +26,11 @@ const Gradient = ({ gradienttype = 'gradient-1', ...props }: Omit<LinearGradient
 
 	const gradients: GradientStyles = {
 		'gradient-1': {
-			colors: ['#b191ff', '#ed254e'],
+			colors: [AppColors["gradient-1-a"], AppColors["gradient-1-b"]],
 			location: [0.09, 1]
 		},
 		'gradient-2': {
-			colors: ['#ed254e', '#b191ff'],
+			colors: [AppColors["gradient-1-b"], AppColors["gradient-1-a"]],
 			location: [0.09, 1]
 		}
 	}

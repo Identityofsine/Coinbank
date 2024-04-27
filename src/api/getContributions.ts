@@ -27,7 +27,7 @@ async function _getContributions(in_refresh: boolean, cb_id: string) {
 		return response;
 	} catch (e: any) {
 		if (e instanceof API.APIError) {
-			console.error("API Error: %s", e.message);
+			console.error("API Error: (status: %s, message:%s)", e.status, e.message);
 			return undefined;
 		} else {
 			console.error("Error fetching coinbanks: %s", e);
@@ -37,4 +37,4 @@ async function _getContributions(in_refresh: boolean, cb_id: string) {
 
 }
 
-export const getContributions = async (cb_id: string) => refresh((out) => _getContributions(out, cb_id));
+export const getContributions = async (cb_id: string) => refresh<API.GetContributionsResponse | undefined>((out) => _getContributions(out, cb_id));

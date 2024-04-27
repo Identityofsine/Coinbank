@@ -2,7 +2,8 @@ import { Storage } from "../util/Storage";
 import { _refreshwrapper, refresh } from "./refresh";
 import { API } from "./request";
 
-async function _getCoinbanks() {
+async function _getCoinbanks(in_refresh: boolean = false) {
+	if (!in_refresh) return;
 	try {
 		const u_id = await Storage.load('user_id');
 		const access_token = await Storage.load('active_token');
@@ -33,5 +34,5 @@ async function _getCoinbanks() {
 	}
 }
 
-export const getCoinbanks = async () => refresh(_getCoinbanks);
+export const getCoinbanks = async () => refresh<API.GetCoinbanksResponse>(_getCoinbanks);
 
