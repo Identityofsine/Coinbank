@@ -2,6 +2,14 @@ export namespace API {
 
 	const baseUrl = "http://localhost:3000";
 
+	export class APIError extends Error {
+		constructor(public status: number, public message: string, public source: string, public url: string) {
+			super(`API Error ${status} (${source}): ${message}`);
+		}
+
+	}
+
+
 	export async function get<T>(url: string, options: RequestInit = {}): Promise<T | undefined> {
 		try {
 			const response = await fetch(baseUrl + url, options);
@@ -35,6 +43,7 @@ export namespace API {
 
 	export type BasicResponse = {
 		status: number;
+		success: boolean;
 		message: string;
 	}
 
@@ -51,5 +60,18 @@ export namespace API {
 
 	export type RefreshResponse = {
 	} & LoginResponse;
+
+	export type Coinbank = {
+		coinbank_id: number;
+		name: string;
+		emoji: string | null;
+		value: number;
+		user_secret: boolean;
+		created_at: string;
+	}
+
+	export type GetCoinbanksResponse = {
+		coinbanks: Coinbank[];
+	} & BasicResponse
 
 }
