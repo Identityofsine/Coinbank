@@ -21,4 +21,12 @@ export namespace Storage {
 			console.error("[Storage::load] Error loading data from storage (%s)", error)
 		}
 	}
+
+	export async function clear(key: string) {
+		try {
+			await AsyncStorage.removeItem(key);
+		} catch (error) {
+			console.error("[Storage::clear] Error clearing data from storage (%s)", error)
+		}
+	}
 }

@@ -5,7 +5,7 @@
  * @format
  */
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import type { PropsWithChildren } from 'react';
 import {
 	SafeAreaView,
@@ -31,6 +31,8 @@ import { HomeScreen } from './screens/Home';
 import { defaultScreenOptions } from './screens/Screen';
 import NavigationBar from './components/NavigationBar';
 import LoginScreen from './screens/Login';
+import { refresh } from './api/refresh';
+import { Storage } from './util/Storage';
 
 type SectionProps = PropsWithChildren<{
 	title: string;
@@ -39,6 +41,17 @@ type SectionProps = PropsWithChildren<{
 export const Stack = createNativeStackNavigator();
 
 function App(): React.JSX.Element {
+
+	useEffect(() => {
+		refresh((result: boolean) => {
+			if (result) {
+			} else {
+				Storage.clear('user_id');
+				Storage.clear('active_token');
+				Storage.clear('refresh_token');
+			}
+		})
+	})
 
 	return (
 		<NavigationContainer
