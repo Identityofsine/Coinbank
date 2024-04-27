@@ -3,7 +3,7 @@
 import { Storage } from "../util/Storage";
 import { API } from "./request";
 
-export async function refresh<T extends any = void>(callback: (result: boolean) => T) {
+export async function refresh<T extends any = void>(callback: (result: boolean) => Promise<T>): Promise<T> {
 	try {
 		const user_id = await Storage.load('user_id');
 		const refresh_token = await Storage.load('refresh_token');
@@ -24,11 +24,14 @@ export async function refresh<T extends any = void>(callback: (result: boolean) 
 		if (response.status != 200) {
 			throw new Error("Server returned error: " + response.message);
 		}
-
-		Storage.save('active_token', response.active_token);
+		await Storage.save('active_token', response.active_token);
 	} catch (error) {
 		console.error("Error refreshing token: %s", error);
-		return callback(false);
+		return await callback(false);
 	}
-	return true;
+	return await callback(true);
+}
+
+export async function _refreshwrapper<T extends any = void>(callback: (...args: any) => Promise<T>) {
+	return () => refresh((T: boolean) => callback(T));
 }

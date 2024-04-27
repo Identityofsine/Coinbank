@@ -16,7 +16,7 @@ export namespace API {
 			const data = await response.json();
 			return data;
 		} catch (error) {
-			console.error("[API::get] Error fetching data from API (%s)", error);
+			console.error("[API::get] Error fetching data from API (error: %s, url: %s)", error, url);
 		}
 	}
 
@@ -70,8 +70,21 @@ export namespace API {
 		created_at: string;
 	}
 
+	export type Contribution = {
+		user_id: number;
+		username: string;
+		coinbank_id: number;
+		name: string;
+		total: number;
+	}
+
 	export type GetCoinbanksResponse = {
 		coinbanks: Coinbank[];
+	} & BasicResponse
+
+
+	export type GetContributionsResponse = {
+		contributions: Contribution[];
 	} & BasicResponse
 
 }

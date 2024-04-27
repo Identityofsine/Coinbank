@@ -1,15 +1,18 @@
 import { Storage } from "../util/Storage";
-import { _refreshwrapper, refresh } from "./refresh";
+import { refresh } from "./refresh";
 import { API } from "./request";
 
-async function _getCoinbanks() {
+async function _getContributions(in_refresh: boolean, cb_id: string) {
+	if (!in_refresh) {
+		return undefined;
+	}
 	try {
 		const u_id = await Storage.load('user_id');
 		const access_token = await Storage.load('active_token');
 		if (!u_id || !access_token) {
 			throw new API.APIError(400, "No access token or User-ID found", "getCoinbanks", "/user/coinbanks");
 		}
-		const response = await API.get<API.GetCoinbanksResponse>('/user/coinbanks', {
+		const response = await API.get<API.GetCoinbanksResponse>(`/coinbank/contributions?cb_id=${cb_id}`, {
 			headers: {
 				'User-Id': u_id,
 				'Token': access_token
@@ -31,7 +34,7 @@ async function _getCoinbanks() {
 			return undefined;
 		}
 	}
+
 }
 
-export const getCoinbanks = async () => refresh(_getCoinbanks);
-
+export const getContributions = async (cb_id: string) => refresh((out) => _getContributions(out, cb_id));
