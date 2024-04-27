@@ -47,7 +47,7 @@ export function AsScreen({ navBar = true, children, refreshControl }: ScreenProp
 				navigation.navigate('Login');
 			}
 		})
-	})
+	}, [])
 
 	function updateData(key: keyof CoinbankContextType, value: any) {
 		setData({ ...data, [key]: value });

@@ -45,7 +45,7 @@ export function HomeScreen() {
 
 	const onRefresh = useCallback(() => {
 		setPending(true);
-		sleep(2000).then(() => {
+		sleep(250).then(() => {
 			getCoinbanks().then((response) => {
 				if (response) {
 					setCoinbanks(response.coinbanks);
@@ -128,7 +128,7 @@ function HomeScreenComponents({ name, value, ...props }: HomeScreenComponentsPro
 
 	useEffect(() => {
 		if (!AppContext) return;
-		sleep(1000).then(() => {
+		sleep(250).then(() => {
 			Storage.load('user_id').then((id) => {
 				if (!id) return;
 				getContributions(props.coinbank_id.toString())
@@ -194,7 +194,7 @@ function HomeScreenComponents({ name, value, ...props }: HomeScreenComponentsPro
 							:
 							<Contributions
 								key={index}
-								name={contribution.name}
+								name={contribution.username}
 								value={contribution.total}
 							/>
 					))

@@ -11,6 +11,7 @@ export namespace API {
 
 
 	export async function get<T>(url: string, options: RequestInit = {}): Promise<T | undefined> {
+		console.log("Fetching data from API: %s", url);
 		try {
 			const response = await fetch(baseUrl + url, options);
 			const data = await response.json();
@@ -21,6 +22,7 @@ export namespace API {
 	}
 
 	export async function post<T>(url: string, body: string | object, options: RequestInit = {}): Promise<T | undefined> {
+		console.log("Fetching data from API: %s", url);
 		try {
 			if (typeof body === 'object')
 				body = JSON.stringify(body);
