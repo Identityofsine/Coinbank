@@ -48,4 +48,7 @@ export namespace API {
 		refresh_token: string;
 	} & BasicResponse;
 
+	export type RefreshResponse = {
+	} & LoginResponse;
+
 }

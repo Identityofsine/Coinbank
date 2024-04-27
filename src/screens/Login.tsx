@@ -2,7 +2,7 @@ import { Button, Pressable, Text, TextInput, View } from "react-native";
 import { AsScreen } from "./Screen";
 import { AppStyles, DryStyles } from "../styles/global.styles";
 import Gradient from "../components/Gradient";
-import React from "react";
+import React, { useEffect } from "react";
 import Key from "../../assets/icons/key.svg";
 import { login } from "../api/login";
 import { Storage } from "../util/Storage";
@@ -11,12 +11,26 @@ import { useNavigation } from "@react-navigation/native";
 function LoginScreen() {
 	const [data, setData] = React.useState({ username: '', password: '' });
 	const navigation = useNavigation();
+	const [isPending, setPending] = React.useState(false);
+
+	useEffect(() => {
+		setPending(true);
+		Storage.load('active_token').then((token) => {
+			if (token) {
+				//@ts-ignore
+				navigation.navigate('Home');
+			}
+		}).finally(() => setPending(false));
+	}, [])
+
 
 	function setState(key: keyof typeof data, value: string) {
 		setData({ ...data, [key]: value });
 	}
 
 	async function onSubmit() {
+		if (isPending) return;
+		setPending(true);
 		const response = await login(data.username, data.password);
 		if (response) {
 			if (response.status != 200) {
@@ -29,11 +43,13 @@ function LoginScreen() {
 				navigation.navigate("Home");
 			}
 		}
+		setPending(false);
 	}
 
 
 	return (
 		<AsScreen navBar={false}>
+			{isPending && <Text>Loading...</Text>}
 			<Gradient.Mask
 				style={{ marginBottom: 35 }}
 				gradienttype='gradient-2'
