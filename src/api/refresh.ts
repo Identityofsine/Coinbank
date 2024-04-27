@@ -5,12 +5,19 @@ import { API } from "./request";
 
 export async function refresh<T extends any = void>(callback: (result: boolean) => T) {
 	try {
-		const active_token = await Storage.load('active_token');
+		const user_id = await Storage.load('user_id');
 		const refresh_token = await Storage.load('refresh_token');
-		if (!active_token || !refresh_token) {
-			throw new Error("No active or refresh token found");
+		if (!refresh_token || !user_id) {
+			throw new Error("No refresh token or User-ID found");
 		}
-		const response = await API.post<API.RefreshResponse>('/user/refresh', { active_token, refresh_token });
+		const response = await API.post<API.RefreshResponse>(
+			'/user/refresh',
+			{ refresh_token: refresh_token },
+			{
+				headers: {
+					'User-Id': user_id
+				}
+			});
 		if (!response) {
 			throw new Error("No response from server");
 		}

@@ -25,7 +25,7 @@ import {
 	ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 import { AppStyles, DryStyles } from './styles/global.styles';
-import { NavigationContainer } from '@react-navigation/native';
+import { createNavigationContainerRef, NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { HomeScreen } from './screens/Home';
 import { defaultScreenOptions } from './screens/Screen';
@@ -42,19 +42,26 @@ export const Stack = createNativeStackNavigator();
 
 function App(): React.JSX.Element {
 
+	const navigation = createNavigationContainerRef();
+
 	useEffect(() => {
 		refresh((result: boolean) => {
 			if (result) {
+				//@ts-ignore
+				navigation.navigate('Home');
 			} else {
 				Storage.clear('user_id');
 				Storage.clear('active_token');
 				Storage.clear('refresh_token');
+				//@ts-ignore
+				navigation.navigate('Login');
 			}
 		})
 	})
 
 	return (
 		<NavigationContainer
+			ref={navigation}
 		>
 			<Stack.Navigator>
 				<Stack.Screen
