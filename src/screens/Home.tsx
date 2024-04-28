@@ -13,6 +13,8 @@ import { getContributions } from "../api/getContributions";
 import { Storage } from "../util/Storage";
 import { useCallback } from "react";
 import { CustomModal, ModalButton } from "../components/Modal";
+import { useRevertableFeedback } from "../util/useRevertableFeedback";
+import { deposit } from "../api/deposit";
 
 type HomeButtonProps = {
 	icon: 'deposit' | 'withdraw' | 'audit'
@@ -38,8 +40,32 @@ function HomeButton({ icon, text, onPress = () => { } }: HomeButtonProps) {
 
 export function HomeScreen() {
 
+	const [modalVisible, setModalVisible] = useState<boolean>(false);
 	const [isPending, setPending] = useState<boolean>(false);
 	const [coinbanks, setCoinbanks] = useState<API.Coinbank[] | undefined>(undefined);
+	const optimisticDeposit = useRevertableFeedback<number>(
+		{
+			value: coinbanks?.[0].value ?? 0,
+			setState: (number) => {
+				if (coinbanks) {
+					setCoinbanks(coinbanks.map((coinbank) => {
+						if (coinbank.coinbank_id === coinbanks[0].coinbank_id) {
+							return { ...coinbank, value: number as number }
+						}
+						return coinbank;
+					}))
+				}
+			},
+			promise: async (value: number) => {
+				const response = await deposit(coinbanks?.[0].coinbank_id.toString() ?? '', value.toString());
+				if (response === undefined) {
+					throw new Error("Deposit failed");
+				}
+				onRefresh();
+				return response;
+			}
+		});
+
 	const AppContext = useContext(CoinbankContext);
 
 	useEffect(() => {
@@ -64,7 +90,14 @@ export function HomeScreen() {
 		AppContext.setData('coinbanks', coinbanks);
 	}, [coinbanks]);
 
+	function openModal(type: 'deposit' | 'withdraw' | 'audit') {
+		setModalVisible(true);
+	}
 
+	function _deposit(value: string) {
+		optimisticDeposit(parseFloat(value), parseFloat(value) + (coinbanks?.[0].value ?? 0));
+		setModalVisible(false);
+	}
 
 	return (
 		<AsScreen
@@ -78,10 +111,13 @@ export function HomeScreen() {
 				/>
 			}
 		>
+			<CustomModal visible={modalVisible} close={() => { }}>
+				<CustomModal.Deposit onDeposit={(value: string) => { _deposit(value); }} close={() => setModalVisible(false)} />
+			</CustomModal>
 
 			{/* Flex Container at top */}
 			{isPending && <HomeScreenSkeleton />}
-			{!isPending && coinbanks && <HomeScreenComponents {...coinbanks?.[0]} />}
+			{!isPending && coinbanks && <HomeScreenComponents openModal={openModal} {...coinbanks?.[0]} />}
 		</AsScreen>
 	);
 }
@@ -122,12 +158,11 @@ function HomeScreenSkeleton({ height = 325 }: { height?: number }) {
 }
 
 type HomeScreenComponentsProps = {
-
+	openModal: (type: 'deposit' | 'withdraw' | 'audit') => void
 } & API.Coinbank
 
 function HomeScreenComponents({ name, value, ...props }: HomeScreenComponentsProps) {
 
-	const [modalVisible, setModalVisible] = useState<boolean>(true);
 	const [contributions, setContributions] = useState<API.Contribution[]>([]);
 	const AppContext = useContext(CoinbankContext);
 
@@ -166,9 +201,6 @@ function HomeScreenComponents({ name, value, ...props }: HomeScreenComponentsPro
 
 	return (
 		<>
-			<CustomModal visible={modalVisible} close={() => { }}>
-				<CustomModal.Deposit onDeposit={() => { }} close={() => setModalVisible(false)} />
-			</CustomModal>
 			<View style={{ gap: 15 }}>
 				<View>
 					<Text
@@ -213,7 +245,7 @@ function HomeScreenComponents({ name, value, ...props }: HomeScreenComponentsPro
 				<HomeButton
 					icon='deposit'
 					text='Deposit'
-					onPress={() => setModalVisible(true)}
+					onPress={() => props.openModal('deposit')}
 				/>
 				<HomeButton
 					icon='withdraw'

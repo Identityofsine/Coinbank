@@ -89,4 +89,9 @@ export namespace API {
 		contributions: Contribution[];
 	} & BasicResponse
 
+	export type DepositResponse = {
+		coinbank_id: number;
+		value: number;
+	} & BasicResponse
+
 }
