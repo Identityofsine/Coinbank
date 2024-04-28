@@ -1,4 +1,4 @@
-import { Animated, RefreshControl, Text, View } from "react-native";
+import { Animated, Pressable, RefreshControl, Text, TextInput, View } from "react-native";
 import { AsScreen, CoinbankContext } from "./Screen";
 import { AppColors, AppStyles, DryStyles } from "../styles/global.styles";
 import Gradient from "../components/Gradient";
@@ -12,16 +12,19 @@ import { sleep } from "../util/sleep";
 import { getContributions } from "../api/getContributions";
 import { Storage } from "../util/Storage";
 import { useCallback } from "react";
+import { CustomModal, ModalButton } from "../components/Modal";
 
 type HomeButtonProps = {
 	icon: 'deposit' | 'withdraw' | 'audit'
 	text: string
+	onPress?: () => void
 }
 
-function HomeButton({ icon, text }: HomeButtonProps) {
+function HomeButton({ icon, text, onPress = () => { } }: HomeButtonProps) {
 	return (
-		<View
+		<Pressable
 			style={{ ...DryStyles['align-center'], gap: 13 }}
+			onPress={onPress}
 		>
 			{icon === 'deposit' && <Deposit />}
 			{icon === 'withdraw' && <Withdraw />}
@@ -29,7 +32,7 @@ function HomeButton({ icon, text }: HomeButtonProps) {
 			<Text
 				style={{ ...AppStyles.text, ...DryStyles['button-1-text'] }}
 			>{text}</Text>
-		</View>
+		</Pressable>
 	)
 }
 
@@ -75,6 +78,7 @@ export function HomeScreen() {
 				/>
 			}
 		>
+
 			{/* Flex Container at top */}
 			{isPending && <HomeScreenSkeleton />}
 			{!isPending && coinbanks && <HomeScreenComponents {...coinbanks?.[0]} />}
@@ -123,6 +127,7 @@ type HomeScreenComponentsProps = {
 
 function HomeScreenComponents({ name, value, ...props }: HomeScreenComponentsProps) {
 
+	const [modalVisible, setModalVisible] = useState<boolean>(true);
 	const [contributions, setContributions] = useState<API.Contribution[]>([]);
 	const AppContext = useContext(CoinbankContext);
 
@@ -161,6 +166,9 @@ function HomeScreenComponents({ name, value, ...props }: HomeScreenComponentsPro
 
 	return (
 		<>
+			<CustomModal visible={modalVisible} close={() => { }}>
+				<CustomModal.Deposit onDeposit={() => { }} close={() => setModalVisible(false)} />
+			</CustomModal>
 			<View style={{ gap: 15 }}>
 				<View>
 					<Text
@@ -205,6 +213,7 @@ function HomeScreenComponents({ name, value, ...props }: HomeScreenComponentsPro
 				<HomeButton
 					icon='deposit'
 					text='Deposit'
+					onPress={() => setModalVisible(true)}
 				/>
 				<HomeButton
 					icon='withdraw'

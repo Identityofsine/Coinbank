@@ -51,6 +51,15 @@ type DryStyle = {
 }
 
 const DryStyles: DryStyle = {
+
+	//screen-position
+	'absolute-center': {
+		position: 'absolute',
+		left: 0,
+		right: 0,
+		alignItems: 'center',
+	},
+	//flex
 	'screen-padding': {
 		paddingLeft: 25,
 		paddingRight: 25
