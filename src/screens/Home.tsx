@@ -79,8 +79,7 @@ export function HomeScreen() {
 				if (response) {
 					setCoinbanks(response.coinbanks);
 				}
-			})
-				.finally(() => setPending(false));
+			}).finally(() => setPending(false));
 		});
 	}, [])
 

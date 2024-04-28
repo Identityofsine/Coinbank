@@ -19,6 +19,18 @@ const ModalStyle = StyleSheet.create({
 	'circle-text': {
 		fontSize: 42,
 		fontWeight: 300
+	},
+	'under-circle-text': {
+		fontSize: 20,
+		fontWeight: 500,
+	},
+	'under-circle-button': {
+		width: 56,
+		height: 53,
+		backgroundColor: '#101010',
+		borderRadius: 4,
+		borderColor: '#919191',
+		borderWidth: 1,
 	}
 
 });

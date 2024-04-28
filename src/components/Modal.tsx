@@ -60,6 +60,27 @@ CustomModal.Deposit = ({ onDeposit = (value: string) => { }, close = () => { } }
 		setDisplay(result);
 	}
 
+	function ButtonAddition({ value }: { value: number }) {
+		function add() {
+			const parsedisplay = parseFloat(display);
+			if (isNaN(parsedisplay)) {
+				return;
+			}
+			setDisplay((value + parsedisplay).toFixed(2));
+		}
+
+		return (
+			<Pressable
+				style={{ ...ModalStyle['under-circle-button'], ...DryStyles['flex-center'] }}
+				onPress={() => {
+					add();
+				}
+				}>
+				<Text style={{ ...AppStyles.text, ...ModalStyle['under-circle-text'] }}>{value}</Text>
+			</Pressable>
+		)
+	}
+
 
 	return (
 		<View style={{ ...DryStyles['align-center'], gap: 10 }}>
@@ -80,6 +101,13 @@ CustomModal.Deposit = ({ onDeposit = (value: string) => { }, close = () => { } }
 						</TextInput>
 					</View>
 				</View>
+			</View>
+			<View style={{ ...DryStyles['flex-row'], gap: 10 }}>
+				<ButtonAddition value={.01} />
+				<ButtonAddition value={.05} />
+				<ButtonAddition value={.10} />
+				<ButtonAddition value={.25} />
+				<ButtonAddition value={1.00} />
 			</View>
 			<ModalButton onPress={() => { onDeposit(display) }} text="Deposit" />
 			<ModalButton onPress={() => { close(false); }} text="Cancel" primary={false} />
