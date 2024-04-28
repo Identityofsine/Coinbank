@@ -1,12 +1,13 @@
 import { ImageStyle, StyleSheet, TextStyle, ViewStyle } from "react-native";
-import { AppColors } from "./global.styles";
+import { AppColors, DryStyles } from "./global.styles";
 
 export const TransactionStyles = StyleSheet.create({
 	'container': {
 		width: 340,
-		maxWidth: 340,
+		maxWidth: '100%',
 		height: 480,
 		borderRadius: 15,
+		...DryStyles['align-center']
 	},
 	'transaction-container': {
 		width: 316,
@@ -14,10 +15,11 @@ export const TransactionStyles = StyleSheet.create({
 	},
 	'transaction': {
 		width: 316,
-		maxWidth: 100,
+		maxWidth: '100%',
 		height: 70,
 		borderBottomWidth: 1.5,
 		borderBottomColor: '#1c1c1c',
+		...DryStyles['justify-center']
 	},
 	'transaction-text-header': {
 		color: '#ffffff',

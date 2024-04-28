@@ -16,6 +16,7 @@ import { CustomModal, ModalButton } from "../components/Modal";
 import { useRevertableFeedback } from "../util/useRevertableFeedback";
 import { deposit } from "../api/deposit";
 import { Transactions } from "../components/Transaction";
+import { getTransactions } from "../api/getTransactions";
 
 type HomeButtonProps = {
 	icon: 'deposit' | 'withdraw' | 'audit'
@@ -280,19 +281,22 @@ function HomeScreenComponents({ name, value, ...props }: HomeScreenComponentsPro
 	)
 }
 
-function HomeScreenTransactions({ props }: API.Coinbank) {
+function HomeScreenTransactions({ ...props }: API.Coinbank) {
 
 	const [transactions, setTransactions] = useState<API.Transaction[]>([]);
 
 	useEffect(() => {
+		if (!props.coinbank_id) return;
 		sleep(250).then(() => {
-			//getTransactions().then((response) => {
-			//	setTransactions(response.transactions);
-			//})
+			getTransactions(props.coinbank_id.toString()).then((response) => {
+				if (response) {
+					setTransactions(response.transactions);
+				}
+			})
 		})
 	}, [])
 
 	return (
-		<Transactions transactions={[]} />
+		<Transactions transactions={transactions} />
 	)
 }

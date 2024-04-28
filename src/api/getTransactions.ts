@@ -1,4 +1,5 @@
 import { Storage } from "../util/Storage";
+import { refresh } from "./refresh";
 import { API } from "./request";
 
 async function _gettransactions(in_refresh: boolean, cb_id: string) {
@@ -34,3 +35,5 @@ async function _gettransactions(in_refresh: boolean, cb_id: string) {
 		}
 	}
 }
+
+export const getTransactions = async (cb_id: string) => refresh<API.TransactionResponse | undefined>((out) => _gettransactions(out, cb_id));

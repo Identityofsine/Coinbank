@@ -1,7 +1,6 @@
-import { ImageStyle, TouchableOpacity, View, ViewStyle } from "react-native";
+import { ImageStyle, TouchableOpacity, View, ViewStyle, Text } from "react-native";
 import { API } from "../api/request"
 import { DryStyles } from "../styles/global.styles";
-import { Text } from "react-native-svg";
 import { useContext } from "react";
 import { CoinbankContext } from "../screens/Screen";
 import { ContextFunctions } from "../util/ContextFunctions";
@@ -39,9 +38,9 @@ Transactions.Transaction = ({ transaction }: { transaction: API.Transaction }) =
 
 	return (
 		<View style={{ ...DryStyles['flex-row'] }}>
-			<View>
-				<Text>${transaction.value.toFixed(2)}</Text>
-				<Text>{ContextFunctions.getUserName(AppContext.data, transaction.user_id)}</Text>
+			<View style={{ ...TransactionStyles.transaction }}>
+				<Text style={TransactionStyles["transaction-text-header"]}>${transaction.value.toFixed(2)}</Text>
+				<Text style={TransactionStyles["transaction-text-subheader"]}>{ContextFunctions.getUserName(AppContext.data, transaction.user_id)}</Text>
 			</View>
 		</View>
 	)
