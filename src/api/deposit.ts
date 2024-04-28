@@ -24,6 +24,7 @@ async function _deposit(in_refresh: boolean, coinbank_id: string, amount: string
 		if (!response.success) {
 			throw new API.APIError(response.status, response.message, "deposit.ts", "/coinbank/deposit");
 		}
+
 		return response.value;
 
 	} catch (e: any) {

@@ -83,7 +83,7 @@ CustomModal.Deposit = ({ onDeposit = (value: string) => { }, close = () => { } }
 
 
 	return (
-		<View style={{ ...DryStyles['align-center'], gap: 10 }}>
+		<View style={{ ...DryStyles['align-center'], gap: 0, marginTop: 10 }}>
 			<View style={{ position: 'relative' }}>
 				<Circle width={ModalStyle.circle.width} height={ModalStyle.circle.height} />
 				<View style={{ ...DryStyles['flex-center'], position: 'absolute', left: 0, top: 0, ...ModalStyle.circle }}>
@@ -109,8 +109,10 @@ CustomModal.Deposit = ({ onDeposit = (value: string) => { }, close = () => { } }
 				<ButtonAddition value={.25} />
 				<ButtonAddition value={1.00} />
 			</View>
-			<ModalButton onPress={() => { onDeposit(display) }} text="Deposit" />
-			<ModalButton onPress={() => { close(false); }} text="Cancel" primary={false} />
+			<View style={{ ...DryStyles['align-center'], marginTop: 30, gap: 20 }}>
+				<ModalButton onPress={() => { onDeposit(display) }} text="Deposit" />
+				<ModalButton onPress={() => { close(false); }} text="Cancel" primary={false} />
+			</View>
 		</View>
 	)
 }

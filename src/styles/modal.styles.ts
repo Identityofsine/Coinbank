@@ -2,11 +2,13 @@ import { StyleSheet } from "react-native";
 
 const ModalStyle = StyleSheet.create({
 	modal: {
-		minWidth: '88.17948718%',
-		height: 540,
+		minWidth: '89.17948718%',
+		minHeight: 510,
 		marginBottom: 80,
 		backgroundColor: 'rgba(16, 16, 16, 0.725)',
 		borderRadius: 8,
+		borderColor: '#323232',
+		borderWidth: 1.3
 	},
 	text: {
 		fontSize: 26,
