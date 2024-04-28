@@ -25,7 +25,7 @@ type CoinbankWithTransactions = {
 	transactions?: API.Transaction[];
 } & CoinbankWithContributuers
 
-type CoinbankContextType = {
+export type CoinbankContextType = {
 	user_id: string;
 	coinbanks: CoinbankWithTransactions[];
 }
