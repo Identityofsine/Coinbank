@@ -38,9 +38,8 @@ export const CustomModal = ({ visible = true, close = () => { }, children }: Mod
 	)
 }
 
-CustomModal.Deposit = ({ onDeposit = () => { }, close = () => { } }: { onDeposit: Function, close: Function }) => {
+CustomModal.Deposit = ({ onDeposit = (value: string) => { }, close = () => { } }: { onDeposit: Function, close: Function }) => {
 
-	const [amount, setAmount] = useState<number>(0);
 	const [display, setDisplay] = useState<string>('0.00');
 
 	function onInput(value: string) {
@@ -62,10 +61,6 @@ CustomModal.Deposit = ({ onDeposit = () => { }, close = () => { } }: { onDeposit
 	}
 
 
-	const printDollar = useCallback((doller: number) => {
-		setDisplay(doller.toFixed(2));
-	}, []);
-
 	return (
 		<View style={{ ...DryStyles['align-center'], gap: 10 }}>
 			<View style={{ position: 'relative' }}>
@@ -86,7 +81,7 @@ CustomModal.Deposit = ({ onDeposit = () => { }, close = () => { } }: { onDeposit
 					</View>
 				</View>
 			</View>
-			<ModalButton onPress={() => { }} text="Deposit" />
+			<ModalButton onPress={() => { onDeposit(display) }} text="Deposit" />
 			<ModalButton onPress={() => { close(false); }} text="Cancel" primary={false} />
 		</View>
 	)
