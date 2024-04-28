@@ -72,6 +72,14 @@ export namespace API {
 		created_at: string;
 	}
 
+	export type Transaction = {
+		transaction_id: number;
+		coinbank_id: number;
+		user_id: number;
+		value: number;
+		created_at: Date;
+	}
+
 	export type Contribution = {
 		user_id: number;
 		username: string;

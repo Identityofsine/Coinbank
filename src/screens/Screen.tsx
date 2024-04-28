@@ -21,9 +21,13 @@ type CoinbankWithContributuers = {
 	}[]
 } & API.Coinbank
 
+type CoinbankWithTransactions = {
+	transactions?: API.Transaction[];
+} & CoinbankWithContributuers
+
 type CoinbankContextType = {
 	user_id: string;
-	coinbanks: CoinbankWithContributuers[];
+	coinbanks: CoinbankWithTransactions[];
 }
 
 type _state_function_type = Partial<{ [key in keyof CoinbankContextType]: CoinbankContextType[key] }>
