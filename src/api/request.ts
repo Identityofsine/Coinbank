@@ -102,4 +102,8 @@ export namespace API {
 		value: number;
 	} & BasicResponse
 
+	export type TransactionResponse = {
+		transactions: Transaction[];
+	} & BasicResponse
+
 }

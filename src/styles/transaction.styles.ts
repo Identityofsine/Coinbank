@@ -1,15 +1,16 @@
 import { ImageStyle, StyleSheet, TextStyle, ViewStyle } from "react-native";
+import { AppColors } from "./global.styles";
 
 export const TransactionStyles = StyleSheet.create({
 	'container': {
 		width: 340,
-		maxWidth: 88,
-		height: 480
+		maxWidth: 340,
+		height: 480,
+		borderRadius: 15,
 	},
 	'transaction-container': {
 		width: 316,
 		maxHeight: 80,
-		backgroundColor: '#141414',
 	},
 	'transaction': {
 		width: 316,

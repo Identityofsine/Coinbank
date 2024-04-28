@@ -14,6 +14,7 @@ const AppStyles = StyleSheet.create({
 		marginTop: 0,
 		backgroundColor: AppColors["background-color"],
 		flex: 1,
+		alignItems: 'center',
 	},
 	viewContainer: {
 		marginTop: 51,

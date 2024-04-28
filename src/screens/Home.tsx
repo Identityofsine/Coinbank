@@ -15,6 +15,7 @@ import { useCallback } from "react";
 import { CustomModal, ModalButton } from "../components/Modal";
 import { useRevertableFeedback } from "../util/useRevertableFeedback";
 import { deposit } from "../api/deposit";
+import { Transactions } from "../components/Transaction";
 
 type HomeButtonProps = {
 	icon: 'deposit' | 'withdraw' | 'audit'
@@ -121,9 +122,12 @@ export function HomeScreen() {
 			{/* Flex Container at top */}
 			{isPending && <HomeScreenSkeleton />}
 			{!isPending && coinbanks && <HomeScreenComponents openModal={openModal} {...coinbanks?.[0]} />}
+			{!isPending && <HomeScreenTransactions {...coinbanks?.[0]} transactions={[]} />}
 		</AsScreen>
 	);
 }
+
+
 
 function HomeScreenSkeleton({ height = 325 }: { height?: number }) {
 	const shimmerAnim = useRef(new Animated.Value(0)).current;
@@ -273,5 +277,22 @@ function HomeScreenComponents({ name, value, ...props }: HomeScreenComponentsPro
 				/>
 			</View>
 		</>
+	)
+}
+
+function HomeScreenTransactions({ props }: API.Coinbank) {
+
+	const [transactions, setTransactions] = useState<API.Transaction[]>([]);
+
+	useEffect(() => {
+		sleep(250).then(() => {
+			//getTransactions().then((response) => {
+			//	setTransactions(response.transactions);
+			//})
+		})
+	}, [])
+
+	return (
+		<Transactions transactions={[]} />
 	)
 }
