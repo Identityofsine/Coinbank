@@ -61,7 +61,8 @@ export function HomeScreen() {
 				if (response === undefined) {
 					throw new Error("Deposit failed");
 				}
-				onRefresh();
+
+				onRefresh(true);
 				return response;
 			}
 		});
@@ -72,8 +73,9 @@ export function HomeScreen() {
 		onRefresh();
 	}, []);
 
-	const onRefresh = useCallback(() => {
-		setPending(true);
+	const onRefresh = useCallback((ignore_pending: boolean = false) => {
+		if (!ignore_pending)
+			setPending(true);
 		sleep(250).then(() => {
 			getCoinbanks().then((response) => {
 				if (response) {
@@ -178,7 +180,7 @@ function HomeScreenComponents({ name, value, ...props }: HomeScreenComponentsPro
 					});
 			});
 		});
-	}, [])
+	}, [value])
 
 	if (!value) value = 0;
 
