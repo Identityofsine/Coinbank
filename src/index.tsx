@@ -50,6 +50,7 @@ function App(): React.JSX.Element {
 
 
 	return (
+
 		<NavigationContainer
 			ref={navigation}
 		>

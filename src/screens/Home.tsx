@@ -41,8 +41,10 @@ function HomeButton({ icon, text, onPress = () => { } }: HomeButtonProps) {
 export function HomeScreen() {
 
 	const [modalVisible, setModalVisible] = useState<boolean>(false);
+	const [modalType, setModalType] = useState<'deposit' | 'withdraw' | 'audit'>('deposit');
 	const [isPending, setPending] = useState<boolean>(false);
 	const [coinbanks, setCoinbanks] = useState<API.Coinbank[] | undefined>(undefined);
+	const AppContext = useContext(CoinbankContext);
 	const optimisticDeposit = useRevertableFeedback<number>(
 		{
 			value: coinbanks?.[0].value ?? 0,
@@ -67,8 +69,6 @@ export function HomeScreen() {
 			}
 		});
 
-	const AppContext = useContext(CoinbankContext);
-
 	useEffect(() => {
 		onRefresh();
 	}, []);
@@ -88,10 +88,11 @@ export function HomeScreen() {
 	useEffect(() => {
 		if (!coinbanks) return;
 		if (!AppContext) return;
-		AppContext.setData('coinbanks', coinbanks);
+		AppContext.setData('user_id', 'sex');
 	}, [coinbanks]);
 
 	function openModal(type: 'deposit' | 'withdraw' | 'audit') {
+		setModalType(type);
 		setModalVisible(true);
 	}
 
@@ -113,7 +114,8 @@ export function HomeScreen() {
 			}
 		>
 			<CustomModal visible={modalVisible} close={() => { }}>
-				<CustomModal.Deposit onDeposit={(value: string) => { _deposit(value); }} close={() => setModalVisible(false)} />
+				{modalType === 'deposit' && <CustomModal.Deposit onDeposit={(value: string) => { _deposit(value); }} close={() => setModalVisible(false)} />}
+				{modalType === 'withdraw' && <CustomModal.Withdraw onWithdraw={() => setModalVisible(false)} close={() => setModalVisible(false)} />}
 			</CustomModal>
 
 			{/* Flex Container at top */}
@@ -176,6 +178,18 @@ function HomeScreenComponents({ name, value, ...props }: HomeScreenComponentsPro
 					.then((response: API.GetContributionsResponse | undefined) => {
 						if (response) {
 							setContributions(response.contributions);
+							AppContext.setData('coinbanks', (old_data) => {
+								let copy = [...old_data];
+								const result = copy.findIndex(coinbank => coinbank?.coinbank_id === props.coinbank_id);
+								if (result === -1) {
+									return {};
+								}
+								const coinbank = copy[result];
+								if (!coinbank) return {};
+								coinbank.contributer = response.contributions.map((contributer) => ({ username: contributer.username, user_id: contributer.user_id }));
+
+								return copy;
+							})
 						}
 					});
 			});
@@ -251,6 +265,7 @@ function HomeScreenComponents({ name, value, ...props }: HomeScreenComponentsPro
 				<HomeButton
 					icon='withdraw'
 					text='Withdraw'
+					onPress={() => props.openModal('withdraw')}
 				/>
 				<HomeButton
 					icon='audit'
