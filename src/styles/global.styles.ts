@@ -111,29 +111,33 @@ const DryStyles: DryStyle = {
 	//text
 	'h1': {
 		fontSize: 72,
-		fontWeight: 500
+		fontWeight: '500'
 	},
 	'h1-sub': {
 		fontSize: 18,
-		fontWeight: 300,
+		fontWeight: '300',
 		color: AppColors["primary-complement"],
 	},
 	'h2': {
 		fontSize: 46,
-		fontWeight: 500
+		fontWeight: '500'
 	},
 	'h2-sub': {
 		fontSize: 14,
-		fontWeight: 300,
+		fontWeight: '300',
 		color: AppColors["primary-complement"],
+	},
+	'h3': {
+		fontSize: 32,
+		fontWeight: '500'
 	},
 	'button-1-text': {
 		fontSize: 15,
-		fontWeight: 500,
+		fontWeight: '500',
 	},
 	'button-2-text': {
 		fontSize: 20,
-		fontWeight: 500,
+		fontWeight: '500',
 	},
 	//dimensions
 	'full-height': {

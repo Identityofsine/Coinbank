@@ -3,7 +3,7 @@ import { CoinbankContextType } from "../screens/Screen";
 export namespace ContextFunctions {
 
 	export function getUserName(context: Partial<CoinbankContextType>, user_id: number): string {
-		let user = "";
+		let user = "UNKNOWN";
 		if (!context.coinbanks) return user;
 		context.coinbanks.forEach((coinbank) => {
 			coinbank.contributer?.forEach((contributer) => {
