@@ -27,7 +27,7 @@ export const Transactions = ({ transactions, onTransactionPress = (e) => { }, st
 					gradienttype='gradient-2'
 					style={{ width: TransactionStyles.container.width, height: TransactionStyles.container.height, borderRadius: 8, ...DryStyles['flex-center'] }}
 				>
-					<View style={{ width: TransactionStyles.container.width, height: TransactionStyles.container.height, borderColor: "#ffffff", borderWidth: 2, borderRadius: 8 }}>
+					<View style={{ width: TransactionStyles.container.width, height: TransactionStyles.container.height, borderColor: "#ffffff", borderWidth: 1.25, borderRadius: 12 }}>
 					</View>
 				</Gradient.Mask>
 

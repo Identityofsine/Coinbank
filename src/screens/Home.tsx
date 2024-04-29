@@ -24,6 +24,8 @@ type HomeButtonProps = {
 	onPress?: () => void
 }
 
+type HomeModalTypes = 'deposit' | 'withdraw' | 'audit' | 'edit-transactions';
+
 function HomeButton({ icon, text, onPress = () => { } }: HomeButtonProps) {
 	return (
 		<Pressable
@@ -43,7 +45,8 @@ function HomeButton({ icon, text, onPress = () => { } }: HomeButtonProps) {
 export function HomeScreen() {
 
 	const [modalVisible, setModalVisible] = useState<boolean>(false);
-	const [modalType, setModalType] = useState<'deposit' | 'withdraw' | 'audit'>('deposit');
+	const [modalType, setModalType] = useState<HomeModalTypes>('deposit');
+	const [modalObject, setModalObject] = useState<API.Transaction>(); //dangerous
 	const [isPending, setPending] = useState<boolean>(false);
 	const [coinbanks, setCoinbanks] = useState<API.Coinbank[] | undefined>(undefined);
 	const AppContext = useContext(CoinbankContext);
@@ -93,9 +96,10 @@ export function HomeScreen() {
 		AppContext.setData('user_id', 'sex');
 	}, [coinbanks]);
 
-	function openModal(type: 'deposit' | 'withdraw' | 'audit') {
+	function openModal(type: HomeModalTypes, data?: API.Transaction) {
 		setModalType(type);
 		setModalVisible(true);
+		setModalObject(data);
 	}
 
 	function _deposit(value: string) {
@@ -118,12 +122,14 @@ export function HomeScreen() {
 			<CustomModal visible={modalVisible} close={() => { }}>
 				{modalType === 'deposit' && <CustomModal.Deposit onDeposit={(value: string) => { _deposit(value); }} close={() => setModalVisible(false)} />}
 				{modalType === 'withdraw' && <CustomModal.Withdraw onWithdraw={() => setModalVisible(false)} close={() => setModalVisible(false)} />}
+				{modalType === 'edit-transactions' && <CustomModal.EditTransaction onWithdraw={() => setModalVisible(false)} close={() => setModalVisible(false)} />}
+
 			</CustomModal>
 
 			{/* Flex Container at top */}
 			{isPending && <HomeScreenSkeleton />}
 			{!isPending && coinbanks && <HomeScreenComponents openModal={openModal} {...coinbanks?.[0]} />}
-			{!isPending && <HomeScreenTransactions {...coinbanks?.[0]} transactions={[]} />}
+			{!isPending && <HomeScreenTransactions {...coinbanks?.[0]} onTransactionPress={(transaction: API.Transaction) => openModal('edit-transactions', transaction)} />}
 		</AsScreen>
 	);
 }
@@ -281,22 +287,26 @@ function HomeScreenComponents({ name, value, ...props }: HomeScreenComponentsPro
 	)
 }
 
-function HomeScreenTransactions({ ...props }: API.Coinbank) {
+type HomeScreenTransactionsProps = {
+	onTransactionPress?: (transaction: API.Transaction) => void
+} & Partial<API.Coinbank>;
+
+function HomeScreenTransactions({ onTransactionPress, ...props }: HomeScreenTransactionsProps) {
 
 	const [transactions, setTransactions] = useState<API.Transaction[]>([]);
 
 	useEffect(() => {
-		if (!props.coinbank_id) return;
 		sleep(250).then(() => {
-			getTransactions(props.coinbank_id.toString()).then((response) => {
+			if (!props.coinbank_id) return;
+			getTransactions(props?.coinbank_id.toString()).then((response) => {
 				if (response) {
 					setTransactions(response.transactions);
 				}
 			})
 		})
-	}, [])
+	}, [props.value])
 
 	return (
-		<Transactions transactions={transactions} />
+		<Transactions transactions={transactions} onTransactionPress={onTransactionPress} />
 	)
 }

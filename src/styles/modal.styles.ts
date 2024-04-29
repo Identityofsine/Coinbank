@@ -33,7 +33,36 @@ const ModalStyle = StyleSheet.create({
 		borderRadius: 4,
 		borderColor: '#919191',
 		borderWidth: 1,
+	},
+	'dialog-box': {
+		width: 306,
+		minHeight: 220,
+		maxHeight: 348,
+		paddingBottom: 10,
+		backgroundColor: '#101010',
+		borderRadius: 4,
+		borderWidth: 1,
+		borderColor: '#323232'
+	},
+	'dialog-box-header': {
+		fontSize: 28,
+		fontWeight: '600',
+	},
+	'dialog-box-subheader': {
+		fontSize: 16,
+		fontWeight: '500',
+	},
+	'dialog-box-text': {
+		fontSize: 14,
+		fontWeight: '400',
+	},
+	'dialog-box-subtext': {
+		fontSize: 14,
+		fontWeight: '400',
+		color: '#4B4B4B',
 	}
+
+
 
 });
 

@@ -5,6 +5,7 @@ import { BlurView } from "@react-native-community/blur";
 import Gradient from "./Gradient";
 import Circle from "../../assets/icons/circle.svg";
 import { useCallback, useEffect, useState } from "react";
+import { API } from "../api/request";
 
 type ModalProps = {
 	visible: boolean;
@@ -187,6 +188,48 @@ CustomModal.Withdraw = ({ onWithdraw = (value: string) => { }, close = () => { }
 			</View>
 			<View style={{ ...DryStyles['align-center'], marginTop: 30, gap: 20 }}>
 				<ModalButton onPress={() => { onWithdraw(display) }} text="Withdraw" />
+				<ModalButton onPress={() => { close(false); }} text="Cancel" primary={false} />
+			</View>
+		</View>
+	)
+}
+
+type EditTransactionProps = {
+	obj: Partial<API.Transaction>;
+	onComplete: (obj: Partial<API.Transaction>) => void;
+	close: (boolean: boolean) => void;
+}
+
+CustomModal.EditTransaction = ({ obj, onComplete = (obj: Partial<API.Transaction>) => { }, close = () => { } }: EditTransactionProps) => {
+
+	const [display, setDisplay] = useState<string>('0.00');
+	function onInput(value: string) {
+		var result = value
+		if (result.length === 0) {
+			setDisplay("");
+			return;
+		}
+		if (value.charAt(value.length - 1) === ".") {
+		} else {
+			const currencyRegex = /^(?!\$?(([1-9](\d*|\d{0,2}(,\d{3})*))|0)(\.\d{1,2})?$).*$/;
+			if (currencyRegex.test(result)) {
+				setDisplay("" + display);
+				return;
+			}
+
+		}
+		setDisplay(result);
+	}
+
+	return (
+		<View style={{ ...DryStyles['align-center'], gap: 0, marginTop: 10 }}>
+			<View style={{ ...ModalStyle['dialog-box'] }}>
+				<Text style={{ ...AppStyles['text'], ...ModalStyle['dialog-box-header'], textAlign: 'center', marginTop: 10 }}>
+					{obj?.value ?? 0 > 0 ? 'Deposit ' : 'Withdraw '}
+				</Text>
+			</View>
+			<View style={{ ...DryStyles['align-center'], marginTop: 30, gap: 20 }}>
+				<ModalButton onPress={() => { onComplete(obj) }} text="Save" />
 				<ModalButton onPress={() => { close(false); }} text="Cancel" primary={false} />
 			</View>
 		</View>

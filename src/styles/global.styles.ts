@@ -20,6 +20,7 @@ const AppStyles = StyleSheet.create({
 		marginTop: 51,
 		paddingLeft: 25,
 		paddingRight: 25,
+		minWidth: '100%',
 		backgroundColor: AppColors["background-color"]
 	},
 	input: {

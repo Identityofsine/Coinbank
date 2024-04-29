@@ -11,19 +11,19 @@ export namespace TimeFormat {
 		let result = '';
 
 		if (day > 0) {
-			result += `${day} day${day === 1 ? '' : 's'} ago`;
+			result += `${day} Day${day === 1 ? '' : 's'} Ago`;
 			return result;
 		}
 		if (hours > 0) {
-			result += `${hours} hour${hours === 1 ? '' : 's'} ago`;
+			result += `${hours} Hour${hours === 1 ? '' : 's'} Ago`;
 			return result;
 		}
 		if (minutes > 0) {
-			result += `${minutes} minute${minutes === 1 ? '' : 's'} ago`;
+			result += `${minutes} Minute${minutes === 1 ? '' : 's'} Ago`;
 			return result;
 		}
 		if (seconds > 15) {
-			result += `${seconds} second${seconds === 1 ? '' : 's'} ago`;
+			result += `${seconds} Second${seconds === 1 ? '' : 's'} Ago`;
 			return result;
 		}
 		return 'Just now';

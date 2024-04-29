@@ -6,7 +6,7 @@ export const TransactionStyles = StyleSheet.create({
 		width: 340,
 		maxWidth: '100%',
 		height: 480,
-		borderRadius: 15,
+		borderRadius: 18,
 		...DryStyles['align-center']
 	},
 	'transaction-container': {
@@ -20,11 +20,12 @@ export const TransactionStyles = StyleSheet.create({
 		width: 316,
 		maxWidth: '100%',
 		paddingLeft: 14,
-		paddingRight: 20,
+		paddingRight: 30,
 		height: 70,
 		borderBottomWidth: 1.5,
 		borderBottomColor: '#1c1c1c',
-		...DryStyles['justify-center']
+		...DryStyles['justify-center'],
+		...DryStyles['align-center']
 	},
 	'transaction-text-header': {
 		fontWeight: '500',
