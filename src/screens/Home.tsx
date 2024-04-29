@@ -19,6 +19,7 @@ import { Transactions } from "../components/Transaction";
 import { getTransactions } from "../api/getTransactions";
 import { printMoney } from "../util/money";
 import { setTransaction } from "../api/changeTransaction";
+import { refresh } from "../api/refresh";
 
 type HomeButtonProps = {
 	icon: 'deposit' | 'withdraw' | 'audit'
@@ -110,7 +111,7 @@ export function HomeScreen() {
 	}
 
 	function _changeTransaction(transaction: Partial<API.Transaction>) {
-		setTransaction(`${coinbanks?.[0].coinbank_id}`, transaction).finally(() => { setModalObject({}) });
+		setTransaction(`${coinbanks?.[0].coinbank_id}`, transaction).finally(() => { setModalObject({}); onRefresh(true); });
 		setModalVisible(false);
 	}
 
@@ -135,7 +136,7 @@ export function HomeScreen() {
 
 			{/* Flex Container at top */}
 			{isPending && <HomeScreenSkeleton />}
-			{!isPending && coinbanks && <HomeScreenComponents openModal={openModal} {...coinbanks?.[0]} />}
+			{!isPending && coinbanks && <HomeScreenComponents openModal={openModal} state_update={modalObject} {...coinbanks?.[0]} />}
 			{!isPending && <HomeScreenTransactions {...coinbanks?.[0]} state_update={modalObject} onTransactionPress={(transaction: API.Transaction) => openModal('edit-transactions', transaction)} />}
 		</AsScreen>
 	);
@@ -180,9 +181,10 @@ function HomeScreenSkeleton({ height = 325 }: { height?: number }) {
 
 type HomeScreenComponentsProps = {
 	openModal: (type: 'deposit' | 'withdraw' | 'audit') => void
+	state_update: any
 } & API.Coinbank
 
-function HomeScreenComponents({ name, value, ...props }: HomeScreenComponentsProps) {
+function HomeScreenComponents({ name, value, state_update, ...props }: HomeScreenComponentsProps) {
 
 	const [contributions, setContributions] = useState<API.Contribution[]>([]);
 	const AppContext = useContext(CoinbankContext);
@@ -212,7 +214,7 @@ function HomeScreenComponents({ name, value, ...props }: HomeScreenComponentsPro
 					});
 			});
 		});
-	}, [value])
+	}, [value, state_update])
 
 	if (!value) value = 0;
 
