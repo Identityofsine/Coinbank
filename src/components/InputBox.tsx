@@ -1,7 +1,7 @@
 import { Text, TextInput, View } from "react-native";
 import { InputBoxStyles } from "../styles/inputbox.styles";
 import { Dropdown } from 'react-native-element-dropdown';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 
 type InputBoxProps = {
@@ -28,25 +28,20 @@ export type InputBoxDropdown = {
 type InputBoxDropdownProps = {
 	options: InputBoxDropdown[];
 	defaultValue?: InputBoxDropdown;
-
+	onChange?: (value: InputBoxDropdown) => void;
 } & Omit<InputBoxProps, 'type'>
 
-InputBox.Dropdown = ({ options, defaultValue, placeholder }: InputBoxDropdownProps) => {
+InputBox.Dropdown = ({ options, defaultValue, placeholder, onChange }: InputBoxDropdownProps) => {
 
 	const [current, setCurrent] = useState<InputBoxDropdown | undefined>(defaultValue);
 	const [isFocused, setIsFocused] = useState<boolean>(false);
 
-	const renderLabel = (option: InputBoxDropdown) => {
-		if (isFocused || current) {
-			return (
-				<Text style={InputBoxStyles['input-text']}>{option.display}</Text>
-			)
-		}
-		return null;
-	}
+	useEffect(() => {
+		if (current && onChange) onChange(current);
+	}, [current]);
 
 	return (
-		<View style={InputBoxStyles['input-container']}>
+		<View style={{ ...InputBoxStyles['input-container'], borderColor: isFocused ? '#a2a2a2' : InputBoxStyles["input-container"].borderColor }}>
 			<Dropdown
 				style={{ paddingRight: 10 }}
 				placeholderStyle={{ ...InputBoxStyles['input-text-placeholder'] }}

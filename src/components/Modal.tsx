@@ -4,10 +4,11 @@ import { AppStyles, DryStyles } from "../styles/global.styles";
 import { BlurView } from "@react-native-community/blur";
 import Gradient from "./Gradient";
 import Circle from "../../assets/icons/circle.svg";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { API } from "../api/request";
 import { printMoney } from "../util/money";
 import { InputBox } from "./InputBox";
+import { CoinbankContext } from "../screens/Screen";
 
 type ModalProps = {
 	visible: boolean;
@@ -205,6 +206,8 @@ type EditTransactionProps = {
 CustomModal.EditTransaction = ({ obj, onComplete = (obj: Partial<API.Transaction>) => { }, close = () => { } }: EditTransactionProps) => {
 
 	const [display, setDisplay] = useState<string>('0.00');
+	const AppContext = useContext(CoinbankContext);
+
 	function onInput(value: string) {
 		var result = value
 		if (result.length === 0) {
@@ -223,6 +226,15 @@ CustomModal.EditTransaction = ({ obj, onComplete = (obj: Partial<API.Transaction
 		setDisplay(result);
 	}
 
+	const getCoinbank = useCallback((id: number) => {
+		return AppContext.data.coinbanks?.find((coinbank) => coinbank.coinbank_id === id);
+	}, [AppContext.data])
+
+	const getUsers = useCallback(() => {
+		return getCoinbank(obj?.coinbank_id ?? 0)?.contributer
+	}, [obj])
+
+
 	return (
 		<View style={{ ...DryStyles['align-center'], gap: 0, marginTop: 20 }}>
 			<View style={{ ...ModalStyle['dialog-box'], ...DryStyles['align-center'] }}>
@@ -230,12 +242,24 @@ CustomModal.EditTransaction = ({ obj, onComplete = (obj: Partial<API.Transaction
 					{obj?.value ?? 0 > 0 ? 'Deposit ' : 'Withdraw '}
 					of {printMoney(obj?.value ?? 0)}
 				</Text>
-				<View style={{ marginTop: 10, gap: 7.5 }}>
+				<View style={{ marginTop: 15, gap: 7.5 }}>
 					<View style={{ gap: 5 }}>
 						<Text style={{ ...AppStyles['text'], ...ModalStyle['dialog-box-subheader'] }}>Depositer:</Text>
 						<InputBox.Dropdown
-							options={[{ display: 'Test', id: 1 }]}
-							defaultValue={{ display: 'Test', id: 1 }}
+							options={
+								getUsers()?.map((contributor) => {
+									return {
+										display: contributor.username,
+										id: contributor.user_id
+									}
+								}) ?? []
+							}
+							defaultValue={
+								{
+									display: getUsers()?.find(usr => usr.user_id === obj.user_id)?.username ?? 'Select Depositer',
+									id: obj.user_id ?? 0
+								}
+							}
 							placeholder='Depositer'
 						/>
 
