@@ -6,6 +6,7 @@ import Gradient from "./Gradient";
 import Circle from "../../assets/icons/circle.svg";
 import { useCallback, useEffect, useState } from "react";
 import { API } from "../api/request";
+import { printMoney } from "../util/money";
 
 type ModalProps = {
 	visible: boolean;
@@ -226,6 +227,7 @@ CustomModal.EditTransaction = ({ obj, onComplete = (obj: Partial<API.Transaction
 			<View style={{ ...ModalStyle['dialog-box'] }}>
 				<Text style={{ ...AppStyles['text'], ...ModalStyle['dialog-box-header'], textAlign: 'center', marginTop: 10 }}>
 					{obj?.value ?? 0 > 0 ? 'Deposit ' : 'Withdraw '}
+					of {printMoney(obj?.value ?? 0)}
 				</Text>
 			</View>
 			<View style={{ ...DryStyles['align-center'], marginTop: 30, gap: 20 }}>

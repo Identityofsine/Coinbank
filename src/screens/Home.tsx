@@ -17,6 +17,7 @@ import { useRevertableFeedback } from "../util/useRevertableFeedback";
 import { deposit } from "../api/deposit";
 import { Transactions } from "../components/Transaction";
 import { getTransactions } from "../api/getTransactions";
+import { printMoney } from "../util/money";
 
 type HomeButtonProps = {
 	icon: 'deposit' | 'withdraw' | 'audit'
@@ -46,7 +47,7 @@ export function HomeScreen() {
 
 	const [modalVisible, setModalVisible] = useState<boolean>(false);
 	const [modalType, setModalType] = useState<HomeModalTypes>('deposit');
-	const [modalObject, setModalObject] = useState<API.Transaction>(); //dangerous
+	const [modalObject, setModalObject] = useState<Partial<API.Transaction>>({}); //dangerous
 	const [isPending, setPending] = useState<boolean>(false);
 	const [coinbanks, setCoinbanks] = useState<API.Coinbank[] | undefined>(undefined);
 	const AppContext = useContext(CoinbankContext);
@@ -99,7 +100,7 @@ export function HomeScreen() {
 	function openModal(type: HomeModalTypes, data?: API.Transaction) {
 		setModalType(type);
 		setModalVisible(true);
-		setModalObject(data);
+		setModalObject(data ?? {});
 	}
 
 	function _deposit(value: string) {
@@ -122,7 +123,7 @@ export function HomeScreen() {
 			<CustomModal visible={modalVisible} close={() => { }}>
 				{modalType === 'deposit' && <CustomModal.Deposit onDeposit={(value: string) => { _deposit(value); }} close={() => setModalVisible(false)} />}
 				{modalType === 'withdraw' && <CustomModal.Withdraw onWithdraw={() => setModalVisible(false)} close={() => setModalVisible(false)} />}
-				{modalType === 'edit-transactions' && <CustomModal.EditTransaction onWithdraw={() => setModalVisible(false)} close={() => setModalVisible(false)} />}
+				{modalType === 'edit-transactions' && <CustomModal.EditTransaction obj={modalObject} onComplete={(trans) => setModalVisible(false)} close={() => setModalVisible(false)} />}
 
 			</CustomModal>
 
@@ -219,7 +220,7 @@ function HomeScreenComponents({ name, value, ...props }: HomeScreenComponentsPro
 				</Text>
 				<Text
 					style={{ ...AppStyles.text, ...DryStyles['h2'] }}>
-					${value.toFixed(2)}
+					{printMoney(value)}
 				</Text>
 			</View>
 		)
@@ -242,7 +243,7 @@ function HomeScreenComponents({ name, value, ...props }: HomeScreenComponentsPro
 					>
 						<Text
 							style={{ ...AppStyles.text, ...DryStyles['h1'] }}>
-							${value?.toFixed(2)}
+							{printMoney(value)}
 						</Text>
 					</Gradient.Mask>
 				</View>
