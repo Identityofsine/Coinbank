@@ -205,6 +205,7 @@ type EditTransactionProps = {
 
 CustomModal.EditTransaction = ({ obj, onComplete = (obj: Partial<API.Transaction>) => { }, close = () => { } }: EditTransactionProps) => {
 
+	const [copy, setCopy] = useState<Partial<API.Transaction>>(obj);
 	const [display, setDisplay] = useState<string>('0.00');
 	const AppContext = useContext(CoinbankContext);
 
@@ -231,7 +232,7 @@ CustomModal.EditTransaction = ({ obj, onComplete = (obj: Partial<API.Transaction
 	}, [AppContext.data])
 
 	const getUsers = useCallback(() => {
-		return getCoinbank(obj?.coinbank_id ?? 0)?.contributer
+		return getCoinbank(copy?.coinbank_id ?? 0)?.contributer
 	}, [obj])
 
 
@@ -239,27 +240,30 @@ CustomModal.EditTransaction = ({ obj, onComplete = (obj: Partial<API.Transaction
 		<View style={{ ...DryStyles['align-center'], gap: 0, marginTop: 20 }}>
 			<View style={{ ...ModalStyle['dialog-box'], ...DryStyles['align-center'] }}>
 				<Text style={{ ...AppStyles['text'], ...ModalStyle['dialog-box-header'], textAlign: 'center', marginTop: 10 }}>
-					{obj?.value ?? 0 > 0 ? 'Deposit ' : 'Withdraw '}
-					of {printMoney(obj?.value ?? 0)}
+					{copy?.value ?? 0 > 0 ? 'Deposit ' : 'Withdraw '}
+					of {printMoney(copy?.value ?? 0)}
 				</Text>
 				<View style={{ marginTop: 15, gap: 7.5 }}>
 					<View style={{ gap: 5 }}>
 						<Text style={{ ...AppStyles['text'], ...ModalStyle['dialog-box-subheader'] }}>Depositer:</Text>
 						<InputBox.Dropdown
 							options={
-								getUsers()?.map((contributor) => {
+								[...getUsers()?.map((contributor) => {
 									return {
 										display: contributor.username,
-										id: contributor.user_id
+										id: contributor.user_id ?? -1
 									}
-								}) ?? []
+								}) ?? [], { display: 'UNKNOWN', id: -1 }]
 							}
 							defaultValue={
 								{
-									display: getUsers()?.find(usr => usr.user_id === obj.user_id)?.username ?? 'Select Depositer',
-									id: obj.user_id ?? 0
+									display: getUsers()?.find(usr => usr.user_id === copy.user_id)?.username ?? 'Select Depositer',
+									id: copy.user_id ?? -1
 								}
 							}
+							onChange={(value) => {
+								setCopy({ ...copy, user_id: value.id < 0 ? null : value.id });
+							}}
 							placeholder='Depositer'
 						/>
 
@@ -267,6 +271,14 @@ CustomModal.EditTransaction = ({ obj, onComplete = (obj: Partial<API.Transaction
 					<View style={{ gap: 5 }}>
 						<Text style={{ ...AppStyles['text'], ...ModalStyle['dialog-box-subheader'] }}>Amount:</Text>
 						<InputBox
+							defaultValue={printMoney(copy?.value ?? 0)}
+							onChange={(value) => {
+								const parsed = parseFloat(value.replace('$', ''));
+								if (isNaN(parsed)) {
+									return;
+								}
+								setCopy({ ...copy, value: parsed });
+							}}
 							placeholder='Amount'
 							type='text'
 						/>
@@ -274,7 +286,7 @@ CustomModal.EditTransaction = ({ obj, onComplete = (obj: Partial<API.Transaction
 				</View>
 			</View>
 			<View style={{ ...DryStyles['align-center'], marginTop: 110, gap: 20 }}>
-				<ModalButton onPress={() => { onComplete(obj) }} text="Save" />
+				<ModalButton onPress={() => { onComplete(copy) }} text="Save" />
 				<ModalButton onPress={() => { close(false); }} text="Cancel" primary={false} />
 			</View>
 		</View>

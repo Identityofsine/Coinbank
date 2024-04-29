@@ -75,7 +75,7 @@ export namespace API {
 	export type Transaction = {
 		transaction_id: number;
 		coinbank_id: number;
-		user_id: number;
+		user_id: number | null;
 		value: number;
 		created_at: Date;
 	}

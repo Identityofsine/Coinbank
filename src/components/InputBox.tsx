@@ -6,15 +6,21 @@ import { useEffect, useState } from "react";
 
 type InputBoxProps = {
 	placeholder?: string;
+	defaultValue?: string;
+	onChange?: (value: string) => void;
 	type: 'text' | 'dropdown' | 'price'
 }
 
-export const InputBox = ({ placeholder = '', type }: InputBoxProps) => {
+export const InputBox = ({ placeholder = '', type, onChange, defaultValue }: InputBoxProps) => {
+
+	const [current, setCurrent] = useState<string | undefined>(defaultValue);
+
 	return (
 		<View style={InputBoxStyles['input-container']}>
 			<TextInput
 				placeholder={placeholder}
 				style={InputBoxStyles['input-text']}
+				value={current}
 			/>
 		</View>
 	)
@@ -29,7 +35,7 @@ type InputBoxDropdownProps = {
 	options: InputBoxDropdown[];
 	defaultValue?: InputBoxDropdown;
 	onChange?: (value: InputBoxDropdown) => void;
-} & Omit<InputBoxProps, 'type'>
+} & Omit<Omit<Omit<InputBoxProps, 'type'>, 'onChange'>, 'defaultValue'>
 
 InputBox.Dropdown = ({ options, defaultValue, placeholder, onChange }: InputBoxDropdownProps) => {
 

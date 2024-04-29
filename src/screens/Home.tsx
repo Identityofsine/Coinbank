@@ -18,6 +18,7 @@ import { deposit } from "../api/deposit";
 import { Transactions } from "../components/Transaction";
 import { getTransactions } from "../api/getTransactions";
 import { printMoney } from "../util/money";
+import { setTransaction } from "../api/changeTransaction";
 
 type HomeButtonProps = {
 	icon: 'deposit' | 'withdraw' | 'audit'
@@ -108,6 +109,11 @@ export function HomeScreen() {
 		setModalVisible(false);
 	}
 
+	function _changeTransaction(transaction: Partial<API.Transaction>) {
+		setTransaction(`${coinbanks?.[0].coinbank_id}`, transaction).finally(() => { setModalObject({}) });
+		setModalVisible(false);
+	}
+
 	return (
 		<AsScreen
 			refreshControl={
@@ -123,14 +129,14 @@ export function HomeScreen() {
 			<CustomModal visible={modalVisible} close={() => { }}>
 				{modalType === 'deposit' && <CustomModal.Deposit onDeposit={(value: string) => { _deposit(value); }} close={() => setModalVisible(false)} />}
 				{modalType === 'withdraw' && <CustomModal.Withdraw onWithdraw={() => setModalVisible(false)} close={() => setModalVisible(false)} />}
-				{modalType === 'edit-transactions' && <CustomModal.EditTransaction obj={modalObject} onComplete={(trans) => setModalVisible(false)} close={() => setModalVisible(false)} />}
+				{modalType === 'edit-transactions' && <CustomModal.EditTransaction obj={modalObject} onComplete={(trans) => { _changeTransaction(trans); setModalVisible(false); }} close={() => setModalVisible(false)} />}
 
 			</CustomModal>
 
 			{/* Flex Container at top */}
 			{isPending && <HomeScreenSkeleton />}
 			{!isPending && coinbanks && <HomeScreenComponents openModal={openModal} {...coinbanks?.[0]} />}
-			{!isPending && <HomeScreenTransactions {...coinbanks?.[0]} onTransactionPress={(transaction: API.Transaction) => openModal('edit-transactions', transaction)} />}
+			{!isPending && <HomeScreenTransactions {...coinbanks?.[0]} state_update={modalObject} onTransactionPress={(transaction: API.Transaction) => openModal('edit-transactions', transaction)} />}
 		</AsScreen>
 	);
 }
@@ -289,10 +295,11 @@ function HomeScreenComponents({ name, value, ...props }: HomeScreenComponentsPro
 }
 
 type HomeScreenTransactionsProps = {
+	state_update: any
 	onTransactionPress?: (transaction: API.Transaction) => void
 } & Partial<API.Coinbank>;
 
-function HomeScreenTransactions({ onTransactionPress, ...props }: HomeScreenTransactionsProps) {
+function HomeScreenTransactions({ state_update, onTransactionPress, ...props }: HomeScreenTransactionsProps) {
 
 	const [transactions, setTransactions] = useState<API.Transaction[]>([]);
 
@@ -305,7 +312,7 @@ function HomeScreenTransactions({ onTransactionPress, ...props }: HomeScreenTran
 				}
 			})
 		})
-	}, [props.value])
+	}, [state_update])
 
 	return (
 		<Transactions transactions={transactions} onTransactionPress={onTransactionPress} />
