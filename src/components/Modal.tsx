@@ -7,6 +7,7 @@ import Circle from "../../assets/icons/circle.svg";
 import { useCallback, useEffect, useState } from "react";
 import { API } from "../api/request";
 import { printMoney } from "../util/money";
+import { InputBox } from "./InputBox";
 
 type ModalProps = {
 	visible: boolean;
@@ -223,12 +224,30 @@ CustomModal.EditTransaction = ({ obj, onComplete = (obj: Partial<API.Transaction
 	}
 
 	return (
-		<View style={{ ...DryStyles['align-center'], gap: 0, marginTop: 10 }}>
-			<View style={{ ...ModalStyle['dialog-box'] }}>
+		<View style={{ ...DryStyles['align-center'], gap: 0, marginTop: 20 }}>
+			<View style={{ ...ModalStyle['dialog-box'], ...DryStyles['align-center'] }}>
 				<Text style={{ ...AppStyles['text'], ...ModalStyle['dialog-box-header'], textAlign: 'center', marginTop: 10 }}>
 					{obj?.value ?? 0 > 0 ? 'Deposit ' : 'Withdraw '}
 					of {printMoney(obj?.value ?? 0)}
 				</Text>
+				<View style={{ marginTop: 10, gap: 7.5 }}>
+					<View style={{ gap: 5 }}>
+						<Text style={{ ...AppStyles['text'], ...ModalStyle['dialog-box-subheader'] }}>Depositer:</Text>
+						<InputBox.Dropdown
+							options={[{ display: 'Test', id: 1 }]}
+							defaultValue={{ display: 'Test', id: 1 }}
+							placeholder='Depositer'
+						/>
+
+					</View>
+					<View style={{ gap: 5 }}>
+						<Text style={{ ...AppStyles['text'], ...ModalStyle['dialog-box-subheader'] }}>Amount:</Text>
+						<InputBox
+							placeholder='Amount'
+							type='text'
+						/>
+					</View>
+				</View>
 			</View>
 			<View style={{ ...DryStyles['align-center'], marginTop: 30, gap: 20 }}>
 				<ModalButton onPress={() => { onComplete(obj) }} text="Save" />

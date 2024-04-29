@@ -36,7 +36,7 @@ const ModalStyle = StyleSheet.create({
 	},
 	'dialog-box': {
 		width: 306,
-		minHeight: 220,
+		minHeight: 225,
 		maxHeight: 348,
 		paddingBottom: 10,
 		backgroundColor: '#101010',
@@ -49,7 +49,7 @@ const ModalStyle = StyleSheet.create({
 		fontWeight: '600',
 	},
 	'dialog-box-subheader': {
-		fontSize: 16,
+		fontSize: 18,
 		fontWeight: '500',
 	},
 	'dialog-box-text': {
