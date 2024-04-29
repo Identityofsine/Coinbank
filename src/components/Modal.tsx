@@ -273,7 +273,7 @@ CustomModal.EditTransaction = ({ obj, onComplete = (obj: Partial<API.Transaction
 					</View>
 				</View>
 			</View>
-			<View style={{ ...DryStyles['align-center'], marginTop: 30, gap: 20 }}>
+			<View style={{ ...DryStyles['align-center'], marginTop: 110, gap: 20 }}>
 				<ModalButton onPress={() => { onComplete(obj) }} text="Save" />
 				<ModalButton onPress={() => { close(false); }} text="Cancel" primary={false} />
 			</View>
