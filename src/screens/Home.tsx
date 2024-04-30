@@ -30,7 +30,11 @@ type HomeButtonProps = {
 
 type HomeModalTypes = 'deposit' | 'withdraw' | 'audit' | 'edit-transactions';
 
+const HomeButtonStroke = { strokeWidth: .75, stroke: "#00000060" };
+
 function HomeButton({ icon, text, onPress = () => { } }: HomeButtonProps) {
+
+
 	return (
 		<Pressable
 			style={{ ...DryStyles['align-center'], gap: 13 }}
@@ -42,9 +46,9 @@ function HomeButton({ icon, text, onPress = () => { } }: HomeButtonProps) {
 				useAngle={true}
 				angle={90}
 			>
-				{icon === 'deposit' && <Deposit />}
-				{icon === 'withdraw' && <Withdraw />}
-				{icon === 'audit' && <View style={HomeStyle['audit-button']} ><Audit /></View>}
+				{icon === 'deposit' && <Deposit {...HomeButtonStroke} />}
+				{icon === 'withdraw' && <Withdraw{...HomeButtonStroke} />}
+				{icon === 'audit' && <View style={HomeStyle['audit-button']} ><Audit {...HomeButtonStroke} /></View>}
 			</Gradient>
 			<Text
 				style={{ ...AppStyles.text, ...DryStyles['button-1-text'] }}
