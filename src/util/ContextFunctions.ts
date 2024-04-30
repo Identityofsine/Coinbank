@@ -1,4 +1,4 @@
-import { CoinbankContextType } from "../screens/Screen";
+import { CoinbankContextType } from "..";
 
 export namespace ContextFunctions {
 

@@ -8,7 +8,7 @@ import { useCallback, useContext, useEffect, useState } from "react";
 import { API } from "../api/request";
 import { printMoney } from "../util/money";
 import { InputBox } from "./InputBox";
-import { CoinbankContext } from "../screens/Screen";
+import { CoinbankContext } from "..";
 
 type ModalProps = {
 	visible: boolean;

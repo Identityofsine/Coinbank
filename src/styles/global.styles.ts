@@ -59,7 +59,6 @@ const DryStyles: DryStyle = {
 		position: 'absolute',
 		left: 0,
 		right: 0,
-		alignItems: 'center',
 	},
 	//flex
 	'screen-padding': {

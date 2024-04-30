@@ -11,9 +11,8 @@ export const TransactionStyles = StyleSheet.create({
 	},
 	'transaction-container': {
 		width: 316,
-		maxHeight: '90%',
+		maxHeight: '100%',
 		backgroundColor: '#141414',
-		marginTop: 10,
 		borderRadius: 3
 	},
 	'transaction': {
