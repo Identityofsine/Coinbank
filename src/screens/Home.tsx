@@ -36,7 +36,12 @@ function HomeButton({ icon, text, onPress = () => { } }: HomeButtonProps) {
 			style={{ ...DryStyles['align-center'], gap: 13 }}
 			onPress={onPress}
 		>
-			<Gradient gradienttype='gradient-1' style={HomeStyle['home-button']}>
+			<Gradient
+				gradienttype='gradient-1'
+				style={HomeStyle['home-button']}
+				useAngle={true}
+				angle={90}
+			>
 				{icon === 'deposit' && <Deposit />}
 				{icon === 'withdraw' && <Withdraw />}
 				{icon === 'audit' && <View style={HomeStyle['audit-button']} ><Audit /></View>}
@@ -246,10 +251,10 @@ function HomeScreenComponents({ name, value, state_update, ...props }: HomeScree
 						Your Balance
 					</Text>
 					<Gradient.Mask
-						gradienttype='gradient-2'
+						gradienttype='gradient-1'
 						start={{ x: 0, y: 0 }}
 						end={{ x: 0, y: 4 }}
-						angle={101}
+						angle={-101}
 						useAngle={true}
 					>
 						<Text
