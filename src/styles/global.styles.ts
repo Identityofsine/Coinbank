@@ -4,8 +4,8 @@ const AppColors = {
 	'background-color': '#020202',
 	'primary-color': '#ffffff',
 	'primary-complement': '#878787',
-	'gradient-1-a': '#b191ff',
-	'gradient-1-b': '#ed254e',
+	'gradient-1-a': '#26F596',
+	'gradient-1-b': '#0499F2',
 }
 
 

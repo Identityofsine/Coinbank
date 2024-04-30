@@ -20,6 +20,7 @@ import { getTransactions } from "../api/getTransactions";
 import { printMoney } from "../util/money";
 import { setTransaction } from "../api/changeTransaction";
 import { refresh } from "../api/refresh";
+import { HomeStyle } from "../styles/home.styles";
 
 type HomeButtonProps = {
 	icon: 'deposit' | 'withdraw' | 'audit'
@@ -35,9 +36,11 @@ function HomeButton({ icon, text, onPress = () => { } }: HomeButtonProps) {
 			style={{ ...DryStyles['align-center'], gap: 13 }}
 			onPress={onPress}
 		>
-			{icon === 'deposit' && <Deposit />}
-			{icon === 'withdraw' && <Withdraw />}
-			{icon === 'audit' && <Audit />}
+			<Gradient gradienttype='gradient-1' style={HomeStyle['home-button']}>
+				{icon === 'deposit' && <Deposit />}
+				{icon === 'withdraw' && <Withdraw />}
+				{icon === 'audit' && <View style={HomeStyle['audit-button']} ><Audit /></View>}
+			</Gradient>
 			<Text
 				style={{ ...AppStyles.text, ...DryStyles['button-1-text'] }}
 			>{text}</Text>
@@ -71,7 +74,6 @@ export function HomeScreen() {
 				if (response === undefined) {
 					throw new Error("Deposit failed");
 				}
-
 				onRefresh(true);
 				return response;
 			}
@@ -108,6 +110,7 @@ export function HomeScreen() {
 	function _deposit(value: string) {
 		optimisticDeposit(parseFloat(value), parseFloat(value) + (coinbanks?.[0].value ?? 0));
 		setModalVisible(false);
+		setModalObject({});
 	}
 
 	function _changeTransaction(transaction: Partial<API.Transaction>) {
