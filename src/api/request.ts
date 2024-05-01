@@ -1,6 +1,6 @@
 export namespace API {
 
-	const baseUrl = "http://localhost:3000";
+	const baseUrl = "http://fofx.zip/cbapi";
 
 	export class APIError extends Error {
 		constructor(public status: number, public message: string, public source: string, public url: string) {
@@ -13,6 +13,7 @@ export namespace API {
 	export async function get<T>(url: string, options: RequestInit = {}): Promise<T | undefined> {
 		console.log("Fetching data from API: %s", url);
 		try {
+			console.log(url);
 			const response = await fetch(baseUrl + url, options);
 			const data = await response.json();
 			return data;

@@ -63,7 +63,7 @@ function NavigationBar() {
 								display: `${coinbank.emoji ? coinbank.emoji + " " : ""}${coinbank.name} - ${printMoney(coinbank.value)}`, id: idx, key: coinbank.coinbank_id
 							})) ?? []
 							]}
-						defaultValue={(data.coinbanks?.[data.current_coinbank ?? 0].coinbank_id) ?? 0}
+						defaultValue={(data.coinbanks?.[data.current_coinbank ?? 0]?.coinbank_id) ?? 0}
 						onChange={(value) => {
 							setData("current_coinbank", (old) => {
 								if (!value || value < 0) {
@@ -77,8 +77,8 @@ function NavigationBar() {
 						<CoinJarLabel
 							id={`$data.coinbanks?.[data.current_coinbank ?? 0].coinbank_id ?? ""}`}
 							color='#23ce6b'
-							name={data.coinbanks?.[data.current_coinbank ?? 0].name ?? ""}
-							emoji={data.coinbanks?.[data.current_coinbank ?? 0].emoji ?? ""}
+							name={data.coinbanks?.[data.current_coinbank ?? 0]?.name ?? ""}
+							emoji={data.coinbanks?.[data.current_coinbank ?? 0]?.emoji ?? ""}
 						/>
 					</InputBox.Picker>
 				</View>
@@ -95,6 +95,7 @@ type NavigationMenuProps = {
 function NavigationMenu({ isOpen, close }: NavigationMenuProps) {
 	const width = useRef(new Animated.Value(0));
 	const navigation = useNavigation();
+	const { data, setData } = useContext(CoinbankContext);
 
 	useEffect(() => {
 		const TIME = 100;
@@ -124,6 +125,8 @@ function NavigationMenu({ isOpen, close }: NavigationMenuProps) {
 		Storage.clear('user_id');
 		Storage.clear('active_token');
 		Storage.clear('refresh_token');
+		setData('coinbanks', []);
+		setData('current_coinbank', 0);
 		//@ts-ignore
 		navigation.navigate('Login');
 		close();

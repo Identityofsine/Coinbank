@@ -68,11 +68,11 @@ export function HomeScreen() {
 	const [coinbanks, setCoinbanks] = [data.coinbanks, (coinbanks: API.Coinbank[]) => setData('coinbanks', coinbanks)];
 	const optimisticDeposit = useRevertableFeedback<number>(
 		{
-			value: coinbanks?.[data.current_coinbank ?? 0].value ?? 0,
+			value: (coinbanks?.[data.current_coinbank ?? 0]?.value) ?? 0,
 			setState: (number) => {
 				if (coinbanks) {
 					setCoinbanks(coinbanks.map((coinbank) => {
-						if (coinbank.coinbank_id === coinbanks[data.current_coinbank ?? 0].coinbank_id) {
+						if (coinbank.coinbank_id === (coinbanks[data.current_coinbank ?? 0]?.coinbank_id ?? 0)) {
 							return { ...coinbank, value: number as number }
 						}
 						return coinbank;
@@ -124,6 +124,25 @@ export function HomeScreen() {
 	function _changeTransaction(transaction: Partial<API.Transaction>) {
 		setTransaction(`${coinbanks?.[data.current_coinbank ?? 0].coinbank_id}`, transaction).finally(() => { setModalObject({}); onRefresh(true); });
 		setModalVisible(false);
+	}
+
+	if (!isPending && (!coinbanks || coinbanks.length === 0)) {
+		return (
+			<AsScreen>
+				<Gradient.Mask
+					gradienttype='gradient-1'
+					start={{ x: 0, y: 0 }}
+					end={{ x: 0, y: 4 }}
+					angle={-101}
+					useAngle={true}
+				>
+					<View style={{ ...DryStyles['flex-center'], ...DryStyles['flex-1'] }}>
+						<Text style={{ ...AppStyles.text, ...DryStyles['h1'] }}>No Coinbanks</Text>
+					</View>
+				</Gradient.Mask>
+				<Text style={{ ...AppStyles.text, ...DryStyles['h1-sub'] }}>Create a coinbank to get started</Text>
+			</AsScreen>
+		)
 	}
 
 	return (
