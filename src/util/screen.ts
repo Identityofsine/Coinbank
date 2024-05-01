@@ -23,4 +23,8 @@ export namespace ScreenMath {
 	export function calc(type: 'width' | 'height', value: number): number {
 		return Dimensions.get('window')[type] + value;
 	}
+
+	export function getHeight(): number {
+		return Dimensions.get('window').height;
+	}
 }

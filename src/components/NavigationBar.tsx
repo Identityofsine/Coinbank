@@ -10,6 +10,7 @@ import { printMoney } from "../util/money";
 import { CoinbankContext } from "..";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ScreenMath } from "../util/screen";
+import { useNavigation } from "@react-navigation/native";
 
 function NavigationBar() {
 
@@ -92,9 +93,10 @@ type NavigationMenuProps = {
 
 function NavigationMenu({ isOpen, close }: NavigationMenuProps) {
 	const width = useRef(new Animated.Value(0));
+	const navigation = useNavigation();
 
 	useEffect(() => {
-		const TIME = 230;
+		const TIME = 100;
 		const _width = width.current;
 		if (isOpen) {
 			Animated.timing(_width, {
@@ -111,6 +113,12 @@ function NavigationMenu({ isOpen, close }: NavigationMenuProps) {
 		}
 	}, [isOpen])
 
+	function navigateTo(route: string) {
+		close();
+		//@ts-ignore
+		navigation.navigate(route);
+	}
+
 	return (
 		<Animated.View style={{ ...NavbarStyles['navmenu'], width: width.current }}>
 			<Gradient.Mask gradienttype='gradient-1' style={{ ...NavbarStyles['navmenu-container'], width: '100%' }}>
@@ -118,10 +126,18 @@ function NavigationMenu({ isOpen, close }: NavigationMenuProps) {
 				</View>
 			</Gradient.Mask>
 			<View style={NavbarStyles['navbar-internal']}>
-				<View style={{ marginTop: 75 + 80, width: '100%', ...DryStyles['flex-column'], gap: 0 }}>
+				<View style={{ marginTop: '135%', width: '100%', ...DryStyles['flex-column'], gap: 0 }}>
+					<NavigationBarItem name='Coinbank'
+						onClick={() => navigateTo('Home')}
+					/>
 					<NavigationBarItem name='Show Coinbank Details' />
-					<NavigationBarItem name='Add a Coinbank' />
-					<NavigationBarItem name='Create a Coinbank' style={{ borderBottomWidth: 2.1 }} />
+					<NavigationBarItem name='Add a Coinbank'
+						onClick={() => navigateTo('Add-Coinbank')}
+					/>
+					<NavigationBarItem name='Create a Coinbank'
+						style={{ borderBottomWidth: 2.1 }}
+						onClick={() => navigateTo('Create-Coinbank')}
+					/>
 					<View style={{ marginTop: 120 }}>
 						<NavigationBarItem name='Settings' />
 						<NavigationBarItem name='Logout' style={{ borderBottomWidth: 2.1 }} />
@@ -140,7 +156,7 @@ type NavigationBarItemProps = {
 
 function NavigationBarItem({ style, onClick, name }: NavigationBarItemProps) {
 	return (
-		<TouchableOpacity style={{ ...NavbarStyles['navbar-item'], ...style }}>
+		<TouchableOpacity style={{ ...NavbarStyles['navbar-item'], ...style }} onPress={() => onClick && onClick()}>
 			<Text style={NavbarStyles['navbar-item-text']}>
 				{name}
 			</Text>

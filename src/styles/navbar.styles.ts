@@ -4,7 +4,7 @@ import { ScreenMath } from "../util/screen";
 
 export const NavbarStyles = StyleSheet.create({
 	'navmenu': {
-		height: '110%',
+		height: ScreenMath.getHeight() + 80,
 		width: '0%',
 		overflow: 'hidden',
 		position: 'absolute',

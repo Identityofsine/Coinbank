@@ -40,4 +40,5 @@ export function AsScreen({ navBar = true, children, refreshControl }: ScreenProp
 
 export const defaultScreenOptions = {
 	headerShown: false,
+	gestureEnabled: false,
 };
