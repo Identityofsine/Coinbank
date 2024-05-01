@@ -17,7 +17,7 @@ import { refresh } from './api/refresh';
 import { Storage } from './util/Storage';
 import { getCoinbanks } from './api/getCoinbanks';
 import { StatusBar } from 'react-native';
-import { AddCoinbank } from './screens/AddCoinbank';
+import AddCoinbank from './screens/AddCoinbank';
 import CreateCoinbank from './screens/CreateCoinbank';
 
 

@@ -11,6 +11,11 @@ export namespace ScreenMath {
 		return (value / 100) * width;
 	}
 
+	export function calculateHeightPrecentage(value: number): `${number}%` {
+		const height = Dimensions.get('window').height;
+		return `${(value / 100) * height}%`;
+	}
+
 	export function calculateHeight(value: number): number {
 		const height = Dimensions.get('window').height;
 		return (value / 100) * height;

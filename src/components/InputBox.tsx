@@ -9,19 +9,34 @@ type InputBoxProps = {
 	placeholder?: string;
 	defaultValue?: string;
 	onChange?: (value: string) => void;
-	type: 'text' | 'dropdown' | 'price'
+	style?: ViewStyle;
+	type: 'text' | 'dropdown' | 'price' | 'emoji'
 }
 
-export const InputBox = ({ placeholder = '', type, onChange, defaultValue }: InputBoxProps) => {
+export const InputBox = ({ style, placeholder = '', type, onChange, defaultValue }: InputBoxProps) => {
 
 	const [current, setCurrent] = useState<string | undefined>(defaultValue);
 
+	function inputChange(value: string) {
+		if (type === 'emoji') {
+			if (!/\P{Emoji}/u.test(value))
+				setCurrent(value);
+			else {
+				setCurrent("");
+			}
+
+		} else {
+			setCurrent(value);
+		}
+	}
+
 	return (
-		<View style={InputBoxStyles['input-container']}>
+		<View style={{ ...InputBoxStyles['input-container'], ...style }}>
 			<TextInput
 				placeholder={placeholder}
 				style={InputBoxStyles['input-text']}
 				value={current}
+				onChangeText={inputChange}
 			/>
 		</View>
 	)

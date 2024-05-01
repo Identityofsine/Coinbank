@@ -1,6 +1,6 @@
 import { AsScreen } from "./Screen";
 
-export function AddCoinbank() {
+export default function AddCoinbank() {
 	return (
 		<AsScreen>
 

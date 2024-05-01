@@ -8,6 +8,7 @@ import { refresh } from "../api/refresh";
 import { Storage } from "../util/Storage";
 import { getCoinbanks } from "../api/getCoinbanks";
 import { CoinbankContext } from "..";
+import { ScreenMath } from "../util/screen";
 
 type ScreenProps = {
 	navBar?: boolean;
@@ -23,7 +24,7 @@ export function AsScreen({ navBar = true, children, refreshControl }: ScreenProp
 			style={{ ...AppStyles.safeViewContainer }}
 		>
 			<ScrollView
-				style={{ height: '120%', overflow: 'visible', zIndex: 1 }}
+				style={{ height: ScreenMath.calculateHeightPrecentage(250), overflow: 'visible', zIndex: 1 }}
 				refreshControl={refreshControl}
 				scrollEnabled={!data.stop_scrolling}
 			>
