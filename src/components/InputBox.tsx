@@ -3,6 +3,7 @@ import { InputBoxStyles } from "../styles/inputbox.styles";
 import { Dropdown } from 'react-native-element-dropdown';
 import { useEffect, useState } from "react";
 import RNPickerSelect from 'react-native-picker-select';
+import { EmojiPattern, isSingleEmoji } from "../util/emojitest";
 
 
 type InputBoxProps = {
@@ -17,21 +18,37 @@ export const InputBox = ({ style, placeholder = '', type, onChange, defaultValue
 
 	const [current, setCurrent] = useState<string | undefined>(defaultValue);
 
+	useEffect(() => {
+		if (current && type === 'emoji') {
+			if (isSingleEmoji(current)) {
+				onChange && onChange(current);
+				return;
+			}
+			if (EmojiPattern.test(current))
+				onChange && onChange(current);
+			else {
+				setCurrent('');
+			}
+		}
+	}, [current])
+
 	function inputChange(value: string) {
 		if (type === 'emoji') {
-			if (!/\P{Emoji}/u.test(value))
+			if (value.length < 1) {
+				setCurrent(value);
+			}
+			if (isSingleEmoji(value))
 				setCurrent(value);
 			else {
-				setCurrent("");
+				setCurrent('');
 			}
-
 		} else {
 			setCurrent(value);
 		}
 	}
 
 	return (
-		<View style={{ ...InputBoxStyles['input-container'], ...style }}>
+		<View style={{ ...InputBoxStyles['input-container'], ...style, ...type === 'emoji' && InputBoxStyles['input-emoji'] }}>
 			<TextInput
 				placeholder={placeholder}
 				style={InputBoxStyles['input-text']}

@@ -13,6 +13,13 @@ export const InputBoxStyles = StyleSheet.create({
 		paddingLeft: 15,
 		...DryStyles['justify-center']
 	},
+	'input-emoji': {
+		width: 96,
+		height: 78,
+		fontSize: 24,
+		alignItems: 'center',
+		paddingLeft: 0
+	},
 	'input-text': {
 		fontSize: 16,
 		fontWeight: '400',

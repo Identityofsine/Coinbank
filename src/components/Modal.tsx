@@ -1,4 +1,4 @@
-import { Modal, Pressable, View, Text, TextInput } from "react-native";
+import { Modal, Pressable, View, Text, TextInput, ViewStyle } from "react-native";
 import { ModalStyle } from "../styles/modal.styles";
 import { AppStyles, DryStyles } from "../styles/global.styles";
 import { BlurView } from "@react-native-community/blur";
@@ -294,30 +294,30 @@ CustomModal.EditTransaction = ({ obj, onComplete = (obj: Partial<API.Transaction
 }
 
 
-export function ModalButton({ onPress, text, primary = true }: { onPress: () => void, text: string, primary?: boolean }) {
+export function ModalButton({ style, onPress, text, primary = true, disabled = false }: { onPress: () => void, text: string, primary?: boolean, style?: ViewStyle, disabled?: boolean }) {
 
-	const HEIGHT = 54;
-	const WIDTH = 318;
+	const HEIGHT = style?.height ?? 54;
+	const WIDTH = style?.width ?? 318;
 
 	if (!primary) {
 		return (
-			<Pressable onPress={onPress}>
+			<Pressable onPress={() => !disabled && onPress()} style={{ ...(disabled && { opacity: .5 }) }}>
 				<Gradient.Mask
 					gradienttype='gradient-2'
-					style={{ width: WIDTH, height: HEIGHT, borderRadius: 8, ...DryStyles['flex-center'] }}
+					style={{ width: WIDTH, height: HEIGHT, borderRadius: 8, ...DryStyles['flex-center'], }}
 				>
-					<View style={{ width: WIDTH, height: HEIGHT, borderColor: "#ffffff", borderWidth: 2, borderRadius: 8 }}>
+					<View style={{ width: WIDTH, height: HEIGHT, borderColor: "#ffffff", borderWidth: 2, borderRadius: 8, ...(disabled && { opacity: .5 }) }}>
 					</View>
 				</Gradient.Mask>
 				<View style={{ width: WIDTH, height: HEIGHT, ...DryStyles['absolute-center'], ...DryStyles['flex-center'] }}>
 					<Text style={{ ...AppStyles['text'], ...ModalStyle.text }}>{text}</Text>
 				</View>
-			</Pressable>
+			</Pressable >
 		)
 	}
 
 	return (
-		<Pressable onPress={onPress}>
+		<Pressable onPress={onPress} style={{ ...(disabled && { opacity: .75 }) }}>
 			<Gradient useAngle={true} angle={270} style={{ width: WIDTH, height: HEIGHT, borderRadius: 8, ...DryStyles['flex-center'] }}>
 				<Text style={{ ...AppStyles['text'], ...ModalStyle.text }}>{text}</Text>
 			</Gradient>

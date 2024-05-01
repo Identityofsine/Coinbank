@@ -88,6 +88,11 @@ export namespace API {
 		total: number;
 	}
 
+	export type CreateCoinbankResponse = {
+		coinbank_id: number;
+		user_secret: string;
+	} & BasicResponse
+
 	export type GetCoinbanksResponse = {
 		coinbanks: Coinbank[];
 	} & BasicResponse
