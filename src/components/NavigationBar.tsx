@@ -11,6 +11,7 @@ import { CoinbankContext } from "..";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ScreenMath } from "../util/screen";
 import { useNavigation } from "@react-navigation/native";
+import { Storage } from "../util/Storage";
 
 function NavigationBar() {
 
@@ -20,7 +21,7 @@ function NavigationBar() {
 
 	useEffect(() => {
 		const rotation = rotation_ref.current;
-		const time = 200;
+		const time = 100;
 		if (isOpen) {
 			Animated.timing(rotation, {
 				duration: time,
@@ -119,6 +120,15 @@ function NavigationMenu({ isOpen, close }: NavigationMenuProps) {
 		navigation.navigate(route);
 	}
 
+	function logout() {
+		Storage.clear('user_id');
+		Storage.clear('active_token');
+		Storage.clear('refresh_token');
+		//@ts-ignore
+		navigation.navigate('Login');
+		close();
+	}
+
 	return (
 		<Animated.View style={{ ...NavbarStyles['navmenu'], width: width.current }}>
 			<Gradient.Mask gradienttype='gradient-1' style={{ ...NavbarStyles['navmenu-container'], width: '100%' }}>
@@ -140,7 +150,11 @@ function NavigationMenu({ isOpen, close }: NavigationMenuProps) {
 					/>
 					<View style={{ marginTop: 120 }}>
 						<NavigationBarItem name='Settings' />
-						<NavigationBarItem name='Logout' style={{ borderBottomWidth: 2.1 }} />
+						<NavigationBarItem
+							name='Logout'
+							style={{ borderBottomWidth: 2.1 }}
+							onClick={logout}
+						/>
 					</View>
 				</View>
 			</View>

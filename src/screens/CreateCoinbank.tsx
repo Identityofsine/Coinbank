@@ -4,11 +4,12 @@ import { AsScreen } from "./Screen";
 import Gradient from "../components/Gradient";
 import { InputBox } from "../components/InputBox";
 import { ModalButton } from "../components/Modal";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { createCoinbank } from "../api/createCoinbank";
 import { linkCoinbank } from "../api/linkCoinbank";
 import { API } from "../api/request";
 import { useNavigation } from "@react-navigation/native";
+import { CoinbankContext } from "..";
 
 export default function CreateCoinbank() {
 
@@ -19,10 +20,10 @@ export default function CreateCoinbank() {
 	const [message, setMessage] = useState<string>('');
 	const [name, setName] = useState<string>('');
 	const [emoji, setEmoji] = useState<string>('');
+	const { data, setData } = useContext(CoinbankContext);
 
 
 	function submit() {
-		console.log(name);
 		setPending(true);
 		setMessage('Creating Coinbank...');
 		createCoinbank(name, emoji)
@@ -34,6 +35,8 @@ export default function CreateCoinbank() {
 							if (link.success) {
 								setSuccess(true);
 								setMessage('Coinbank linked successfully');
+								setData('new_coinbank', true);
+								setData('current_coinbank', data.coinbanks?.length ?? 0)
 								//@ts-ignore
 								navigation.navigate('Home');
 							} else {
