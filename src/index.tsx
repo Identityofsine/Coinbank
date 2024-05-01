@@ -17,6 +17,8 @@ import { refresh } from './api/refresh';
 import { Storage } from './util/Storage';
 import { getCoinbanks } from './api/getCoinbanks';
 import { StatusBar } from 'react-native';
+import { AddCoinbank } from './screens/AddCoinbank';
+import CreateCoinbank from './screens/CreateCoinbank';
 
 
 export const Stack = createNativeStackNavigator();
@@ -123,6 +125,16 @@ function App(): React.JSX.Element {
 					<Stack.Screen
 						name="Home"
 						component={HomeScreen}
+						options={defaultScreenOptions}
+					/>
+					<Stack.Screen
+						name="Add-Coinbank"
+						component={AddCoinbank}
+						options={defaultScreenOptions}
+					/>
+					<Stack.Screen
+						name="Create-Coinbank"
+						component={CreateCoinbank}
 						options={defaultScreenOptions}
 					/>
 				</Stack.Navigator>
