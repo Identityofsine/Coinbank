@@ -40,4 +40,4 @@ async function _linkcoinbank(in_refresh: boolean, cb_id: string, u_secret: strin
 	}
 }
 
-export const linkCoinbank = async (cb_id: string, u_secret: string) => refresh<number | undefined>((v) => _linkcoinbank(v, cb_id, u_secret));
+export const linkCoinbank = async (cb_id: string, u_secret: string) => refresh<API.BasicResponse>((v) => _linkcoinbank(v, cb_id, u_secret));

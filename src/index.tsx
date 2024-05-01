@@ -39,6 +39,7 @@ export type CoinbankContextType = {
 	coinbanks: CoinbankWithTransactions[];
 	current_coinbank: number;
 	stop_scrolling: boolean;
+	new_coinbank: boolean
 }
 
 type _state_function_type = Partial<{ [key in keyof CoinbankContextType]: CoinbankContextType[key] }>

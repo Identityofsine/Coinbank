@@ -3,15 +3,15 @@ import { sleep } from "../util/sleep";
 import { refresh } from "./refresh";
 import { API } from "./request";
 
-async function _createcoinbank(in_refresh: boolean, name: string) {
+async function _createcoinbank(in_refresh: boolean, name: string, emoji: string): Promise<API.CreateCoinbankResponse | undefined> {
 	if (!in_refresh) {
-		return false;
+		throw new API.APIError(401, "Refresh failed", "createCoinbank.ts", "/coinbank/createCoinbank");
 	}
 	try {
 		const active_token = await Storage.load('active_token');
 		const user_id = await Storage.load('user_id');
-		const response = await API.get<API.DepositResponse>(
-			`/coinbank/create/${name}`,
+		const response = await API.get<API.CreateCoinbankResponse>(
+			`/coinbank/create/${name}?emoji=${emoji}&cb_id=-1`,
 			{
 				headers: {
 					'User-Id': user_id as string,
@@ -25,14 +25,14 @@ async function _createcoinbank(in_refresh: boolean, name: string) {
 			throw new API.APIError(response.status, response.message, "createCoinbank.ts", "/coinbank/createCoinbank");
 		}
 
-		return response.value;
+		return response;
 
 	} catch (e: any) {
 		if (e instanceof API.APIError) {
-			console.error(`[API::deposit] ${e.message}`);
+			console.error(`[API::createCoinbank] ${e.message}`);
 		}
 		return undefined;
 	}
 }
 
-export const createCoinbank = async (name: string) => refresh<number | undefined>((v) => _createcoinbank(v, name));
+export const createCoinbank = async (name: string, emoji: string) => refresh<API.CreateCoinbankResponse | undefined>((v) => _createcoinbank(v, name, emoji));

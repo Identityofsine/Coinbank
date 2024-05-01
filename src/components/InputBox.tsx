@@ -29,6 +29,8 @@ export const InputBox = ({ style, placeholder = '', type, onChange, defaultValue
 			else {
 				setCurrent('');
 			}
+		} else {
+			onChange && onChange(current ?? '');
 		}
 	}, [current])
 

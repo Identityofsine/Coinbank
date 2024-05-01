@@ -90,7 +90,7 @@ export function HomeScreen() {
 
 	useEffect(() => {
 		onRefresh();
-	}, [data.current_coinbank]);
+	}, [data.current_coinbank, data.new_coinbank]);
 
 	const onRefresh = useCallback((ignore_pending: boolean = false) => {
 		if (!ignore_pending)
