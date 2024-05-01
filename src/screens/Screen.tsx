@@ -16,12 +16,16 @@ type ScreenProps = {
 };
 export function AsScreen({ navBar = true, children, refreshControl }: ScreenProps) {
 
+	const { data, setData } = useContext(CoinbankContext);
+
 	return (
 		<SafeAreaView
 			style={{ ...AppStyles.safeViewContainer }}
 		>
 			<ScrollView
+				style={{ height: '120%', overflow: 'visible', zIndex: 1 }}
 				refreshControl={refreshControl}
+				scrollEnabled={!data.stop_scrolling}
 			>
 				{navBar && <NavigationBar />}
 				<View

@@ -16,6 +16,7 @@ import { API } from './api/request';
 import { refresh } from './api/refresh';
 import { Storage } from './util/Storage';
 import { getCoinbanks } from './api/getCoinbanks';
+import { StatusBar } from 'react-native';
 
 
 export const Stack = createNativeStackNavigator();
@@ -35,6 +36,7 @@ export type CoinbankContextType = {
 	user_id: string;
 	coinbanks: CoinbankWithTransactions[];
 	current_coinbank: number;
+	stop_scrolling: boolean;
 }
 
 type _state_function_type = Partial<{ [key in keyof CoinbankContextType]: CoinbankContextType[key] }>
@@ -65,14 +67,16 @@ function App(): React.JSX.Element {
 						if (!user_id) return;
 						updateData('user_id', user_id);
 					});
-					//@ts-ignore
-					navigation.navigate('Home');
+					if (navigation.isReady())
+						//@ts-ignore
+						navigation.navigate('Home');
 				} else {
 					Storage.clear('user_id');
 					Storage.clear('active_token');
 					Storage.clear('refresh_token');
-					//@ts-ignore
-					navigation.navigate('Login');
+					if (navigation.isReady())
+						//@ts-ignore
+						navigation.navigate('Login');
 				}
 			})
 			await getCoinbanks().then(async (response) => {
@@ -95,7 +99,6 @@ function App(): React.JSX.Element {
 			response = value?.(data[key] as CoinbankContextType[T]);
 			if (response === undefined) return;
 		}
-		console.log('response: %s, data(%s): %s', response, key, data[key])
 		if (response === data[key]) return;
 		setData((old_data) => ({ ...old_data, ...{ [key]: response } }));
 	}
@@ -104,6 +107,10 @@ function App(): React.JSX.Element {
 
 	return (
 		<CoinbankContext.Provider value={{ data: { ...data }, setData: updateData }}>
+			<StatusBar
+				hidden={data.stop_scrolling}
+				barStyle={'light-content'}
+			/>
 			<NavigationContainer
 				ref={navigation}
 			>

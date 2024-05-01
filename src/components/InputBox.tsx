@@ -82,12 +82,6 @@ type PickerProps = {
 
 InputBox.Picker = ({ options, defaultValue, onChange, children }: PickerProps) => {
 
-
-	useEffect(() => {
-		console.log('defaultValue: %s', defaultValue);
-		console.log('options: %s', options);
-	})
-
 	return (
 		<RNPickerSelect
 			placeholder={{}}
