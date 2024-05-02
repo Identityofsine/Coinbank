@@ -10,6 +10,9 @@ export async function verify(token: string) {
 export async function login(username: string, password: string) {
 	const response = await API.post<API.LoginResponse>('/user/login', { username, password });
 	if (!response)
-		return false;
+		throw new API.APIError(500, 'Server error', 'login.ts', '/user/login');
+	if (!response.success) {
+		throw new API.APIError(response.status, response.message, 'login.ts', '/user/login');
+	}
 	return response;
 }

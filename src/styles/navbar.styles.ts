@@ -41,10 +41,16 @@ export const NavbarStyles = StyleSheet.create({
 		paddingBottom: 10,
 		justifyContent: 'center'
 	},
+	'navbar-item-light': {
+		backgroundColor: '#f7f7f7',
+	},
 	'navbar-item-text': {
 		fontSize: 18,
 		color: "#FAFAFA",
 		fontWeight: 500,
+	},
+	'navbar-item-text-light': {
+		color: '#101010',
 	},
 	'coinjar-indicator-container': {
 		borderRadius: 360,

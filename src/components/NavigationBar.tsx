@@ -140,20 +140,31 @@ function NavigationMenu({ isOpen, close }: NavigationMenuProps) {
 			</Gradient.Mask>
 			<View style={NavbarStyles['navbar-internal']}>
 				<View style={{ marginTop: '135%', width: '100%', ...DryStyles['flex-column'], gap: 0 }}>
-					<NavigationBarItem name='Coinbank'
+					<NavigationBarItem
+						name='Coinbank'
+						page='Home'
 						onClick={() => navigateTo('Home')}
 					/>
-					<NavigationBarItem name='Show Coinbank Details' />
-					<NavigationBarItem name='Add a Coinbank'
+					<NavigationBarItem
+						name='Show Coinbank Details'
+						page='Coinbank-Details'
+					/>
+					<NavigationBarItem
+						name='Add a Coinbank'
+						page='Add-Coinbank'
 						onClick={() => navigateTo('Add-Coinbank')}
 					/>
 					<NavigationBarItem name='Create a Coinbank'
 						style={{ borderBottomWidth: 2.1 }}
+						page='Create-Coinbank'
 						onClick={() => navigateTo('Create-Coinbank')}
 					/>
 					<View style={{ marginTop: 120 }}>
-						<NavigationBarItem name='Settings' />
+						<NavigationBarItem name='Settings'
+							page="Settings"
+						/>
 						<NavigationBarItem
+							page='__'
 							name='Logout'
 							style={{ borderBottomWidth: 2.1 }}
 							onClick={logout}
@@ -169,15 +180,24 @@ type NavigationBarItemProps = {
 	onClick?: Function
 	name: string
 	style?: ViewStyle
+	page: string
 }
 
-function NavigationBarItem({ style, onClick, name }: NavigationBarItemProps) {
+function NavigationBarItem({ style, onClick, name, page }: NavigationBarItemProps) {
+	const navigation = useNavigation();
+
+	function currentRoute(): string {
+		if (!navigation || !navigation?.getState()) return "";
+		// @ts-ignore
+		return navigation?.getState().routes[navigation.getState().index].name;
+	}
+
 	return (
-		<TouchableOpacity style={{ ...NavbarStyles['navbar-item'], ...style }} onPress={() => onClick && onClick()}>
-			<Text style={NavbarStyles['navbar-item-text']}>
+		<TouchableOpacity style={{ ...NavbarStyles['navbar-item'], ...style, ...currentRoute() === page && NavbarStyles['navbar-item-light'] }} onPress={() => onClick && onClick()}>
+			<Text style={{ ...NavbarStyles['navbar-item-text'], ...currentRoute() === page && NavbarStyles['navbar-item-text-light'] }}>
 				{name}
 			</Text>
-		</TouchableOpacity>
+		</TouchableOpacity >
 	)
 }
 

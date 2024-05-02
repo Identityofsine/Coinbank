@@ -7,6 +7,7 @@ import Key from "../../assets/icons/key.svg";
 import { login } from "../api/login";
 import { Storage } from "../util/Storage";
 import { useNavigation } from "@react-navigation/native";
+import { API } from "../api/request";
 
 function LoginScreen() {
 	const [data, setData] = React.useState({ username: '', password: '' });
@@ -31,16 +32,22 @@ function LoginScreen() {
 	async function onSubmit() {
 		if (isPending) return;
 		setPending(true);
-		const response = await login(data.username, data.password);
-		if (response) {
-			if (response.status != 200) {
-				console.error("Login failed: %s", response.message);
-			} else {
-				Storage.save('user_id', response.user_id);
-				Storage.save('active_token', response.active_token);
-				Storage.save('refresh_token', response.refresh_token);
-				//@ts-ignore
-				navigation.navigate("Home");
+		try {
+			const response = await login(data.username, data.password);
+			if (response) {
+				if (response.status != 200) {
+					console.error("Login failed: %s", response.message);
+				} else {
+					Storage.save('user_id', response.user_id);
+					Storage.save('active_token', response.active_token);
+					Storage.save('refresh_token', response.refresh_token);
+					//@ts-ignore
+					navigation.navigate("Home");
+				}
+			}
+		} catch (e: any) {
+			if (e instanceof API.APIError) {
+				console.error("API Error: %s", e);
 			}
 		}
 		setPending(false);
