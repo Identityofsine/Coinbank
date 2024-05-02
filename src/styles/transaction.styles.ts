@@ -1,16 +1,16 @@
 import { ImageStyle, StyleSheet, TextStyle, ViewStyle } from "react-native";
 import { AppColors, DryStyles } from "./global.styles";
+import { ScreenMath } from "../util/screen";
 
 export const TransactionStyles = StyleSheet.create({
 	'container': {
-		width: 340,
-		maxWidth: '100%',
+		width: ScreenMath.calculateWidth(87),
 		height: 480,
 		borderRadius: 18,
 		...DryStyles['align-center']
 	},
 	'transaction-container': {
-		width: 316,
+		width: '100%',
 		maxHeight: '100%',
 		backgroundColor: '#141414',
 		borderRadius: 3

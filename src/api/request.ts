@@ -1,6 +1,6 @@
 export namespace API {
 
-	const baseUrl = "http://fofx.zip/cbapi";
+	const baseUrl = "http://localhost:3000";
 
 	export class APIError extends Error {
 		constructor(public status: number, public message: string, public source: string, public url: string) {

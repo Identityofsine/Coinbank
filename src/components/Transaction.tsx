@@ -1,4 +1,4 @@
-import { ImageStyle, TouchableOpacity, View, ViewStyle, Text, ScrollView, Pressable, RefreshControlProps, Animated, FlatList } from "react-native";
+import { ImageStyle, TouchableOpacity, View, ViewStyle, Text, ScrollView, Pressable, RefreshControlProps, Animated, FlatList, Dimensions } from "react-native";
 import { API } from "../api/request"
 import { AppStyles, DryStyles } from "../styles/global.styles";
 import { useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
@@ -9,6 +9,7 @@ import Gradient from "./Gradient";
 import { ModalStyle } from "../styles/modal.styles";
 import { TimeFormat } from "../util/time";
 import { InputBox } from "./InputBox";
+import { ScreenMath } from "../util/screen";
 
 
 type TransactionProps = {
@@ -67,7 +68,7 @@ export const Transactions = ({ isPending = false, transactions, onTransactionPre
 						<Transactions.Skeleton />
 					}
 					{!isPending &&
-						<ScrollView horizontal={true} style={{ width: '100%', maxHeight: '95%', marginTop: 16 }}>
+						<ScrollView horizontal={true} style={{ width: ScreenMath.calculateWidth(100), maxHeight: '95%', marginTop: 16 }}>
 							<FlatList
 								style={TransactionStyles["transaction-container"]}
 								refreshControl={refreshControl}
